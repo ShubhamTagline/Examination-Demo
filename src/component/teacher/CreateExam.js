@@ -25,12 +25,12 @@ function CreateExam() {
     const name = e.target.name;
     const value = e.target.value;
 
-     const radioAry = [1, 3, 5, 7];
-     const mainIndex = index;
+    const radioAry = [1, 3, 5, 7];
+    const mainIndex = index;
 
-     radioAry.map((val, index) =>
-       mainIndex === val ? (item.answer = item.opt1 ) : null
-     );
+    radioAry.map((val, index) =>
+      mainIndex === val ? (item.answer = item.opt1) : null
+    );
 
     // if (index === 1) {
     //   item.answer = item.opt1;
@@ -58,7 +58,6 @@ function CreateExam() {
     data.answer = item.answer;
     data.options = optionAry;
     const subject = item.subjectName;
-
     //problem -2 : i add multiple question that time 2 or third question insert time subjectName == undefined
     let cloneResult = { ...result };
     cloneResult.questions.push(data);
@@ -73,7 +72,6 @@ function CreateExam() {
     e.preventDefault();
     alert("submit Btn");
   };
-  
   return (
     <div>
       <h1>Create Exam Module</h1>
