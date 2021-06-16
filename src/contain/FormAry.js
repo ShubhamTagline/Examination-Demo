@@ -116,10 +116,10 @@ export const subjectAry = {
 export const questionAry = {
   data: [
     {
-      type:"text",
-      name:"question",
-      label:"Question",
-      placeholder:"Enter Question"
+      type: "text",
+      name: "question",
+      label: "Question",
+      placeholder: "Enter Question",
     },
     {
       type: "radio",
@@ -130,16 +130,18 @@ export const questionAry = {
       type: "text",
       name: "opt1",
       placeholder: "Enter Option",
+      textVal: true,
     },
     {
       type: "radio",
       name: "option",
-      label: "B"
+      label: "B",
     },
     {
       type: "text",
       name: "opt2",
       placeholder: "Enter Option",
+      textVal: true,
     },
     {
       type: "radio",
@@ -150,6 +152,7 @@ export const questionAry = {
       type: "text",
       name: "opt3",
       placeholder: "Enter Option",
+      textVal: true,
     },
     {
       type: "radio",
@@ -160,12 +163,13 @@ export const questionAry = {
       type: "text",
       name: "opt4",
       placeholder: "Enter Option",
+      textVal: true,
     },
     {
-      type:"text",
-      name:"answer",
-      placeholder:"Your Answer",
-      label:"Answer:"
-    }
+      type: "text",
+      name: "answer",
+      placeholder: "Your Answer",
+      label: "Answer:",
+    },
   ],
 };

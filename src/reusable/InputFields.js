@@ -2,7 +2,7 @@ import React from "react";
 import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
-function InputFields({ fields, data, errors, onChange, ...props }) {
+function InputFields({ fields, data, errors, onChange, result, ...props }) {
   return (
     <>
       {fields.data.map((val, index) => {
@@ -14,12 +14,19 @@ function InputFields({ fields, data, errors, onChange, ...props }) {
               name={val.name}
               placeholder={val.placeholder}
               checked={val.checked}
-              value={val.value ? val.value : data && data[val.name]} 
+              value={
+                val.value
+                  ? val.value
+                  : (data && data[val.name]) 
+                  // || val.name === "answer"
+                  // ? result
+                  // : undefined
+              }
               {...(val.type === "password" && { autoComplete: "on" })}
               {...(val.name === "emailProfile" || val.name === "answer"
                 ? { readOnly: true }
                 : { readOnly: false })}
-              onChange={(e) => onChange(e, index)}
+              onChange={(e) => onChange(e, index, val)}
               {...props}
             ></input>
             <div className="errorMsg mb-3">{errors && errors[val.name]}</div>

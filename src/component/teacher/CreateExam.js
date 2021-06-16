@@ -7,72 +7,76 @@ import { ButtonField } from "../../reusable/OtherReuse";
 
 function CreateExam() {
   const initialState = {
-    subjectName: "",
-    questions: [
-      {
-        question: "",
-        answer: "",
-        options: ["opt1", "opt2", "opt3", "opt4"],
-      },
-    ],
+    question: "",
+    opt1: "",
+    opt2: "",
+    opt3: "",
+    opt4: "",
+    answer: "",
   };
 
   const [item, setItem] = useState(initialState);
-  const [data,setData]=useState() //we take a data
+  const [result, setResult] = useState({
+    subjectName: "",
+    questions: [],
+  });
 
-  const handleChange = (e, index) => {
+  const handleChange = (e, index, val) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(index);
 
-    let cloneItem = { ...item };
-    if (index === 0) {
-      cloneItem.questions[0].question = value;
-      setItem(cloneItem);
-    }
+     const radioAry = [1, 3, 5, 7];
+     const mainIndex = index;
 
-    //solve this Problem ???
-    if (index === 1) {
-      item.questions[0].answer = item.opt1;
-    } else if (index === 3) {
-      item.answer = item.opt2;
-    } else if (index === 5) {
-      item.answer = item.opt3;
-    } else if (index === 7) {
-      item.answer = item.opt4;
-    }
+     radioAry.map((val, index) =>
+       mainIndex === val ? (item.answer = item.opt1 ) : null
+     );
 
     // if (index === 1) {
-    //   cloneItem.questions[0].answer = item.opt1;
+    //   item.answer = item.opt1;
     // } else if (index === 3) {
-    //   cloneItem.questions[0].answer = item.opt2;
+    //   item.answer = item.opt2;
     // } else if (index === 5) {
-    //   cloneItem.questions[0].answer = item.opt3;
+    //   item.answer = item.opt3;
     // } else if (index === 7) {
-    //   cloneItem.questions[0].answer = item.opt4;
+    //   item.answer = item.opt4;
     // }
-    if (name === "subjectName") {
-      setItem({ ...item, subjectName: value });
-    }
-    // setItem({
-    //   ...item,
-    //    : value,
-    // });
+
+    setItem({
+      ...item,
+      [name]: value,
+    });
   };
 
-  const handleClick = () => {
-    console.log(item);
+  const handleClick = (e) => {
+    e.preventDefault();
+    const optionAry = [];
+    optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
+
+    const data = {};
+    data.question = item.question;
+    data.answer = item.answer;
+    data.options = optionAry;
+    const subject = item.subjectName;
+
+    //problem -2 : i add multiple question that time 2 or third question insert time subjectName == undefined
+    let cloneResult = { ...result };
+    cloneResult.questions.push(data);
+    cloneResult.subjectName = subject;
+    setResult(cloneResult);
+    //clear question
+    setItem(initialState);
   };
+  console.log(result);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(item);
+    alert("submit Btn");
   };
-
+  
   return (
     <div>
       <h1>Create Exam Module</h1>
-
       <form onSubmit={handleSubmit}>
         <OptionField
           values={subjectAry}
@@ -83,7 +87,7 @@ function CreateExam() {
         <br />
         <InputFields
           fields={questionAry}
-          data={item.questions[0].answer}
+          data={item}
           onChange={handleChange}
         ></InputFields>
         &nbsp;&nbsp;
