@@ -2,7 +2,9 @@ import React from "react";
 import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
-function InputFields({ fields, data, errors, onChange, result, ...props }) {
+function InputFields({ fields, data, errors, onChange, check, submitDisable }) {
+  // console.log(check)
+
   return (
     <>
       {fields.data.map((val, index) => {
@@ -13,27 +15,27 @@ function InputFields({ fields, data, errors, onChange, result, ...props }) {
               type={val.type}
               name={val.name}
               placeholder={val.placeholder}
-              checked={val.checked}
-              value={
-                val.value
-                  ? val.value
-                  : (data && data[val.name]) 
-                  // || val.name === "answer"
-                  // ? result
-                  // : undefined
-              }
+              checked={val.type === "radio" && check}
+              value={val.value ? val.value : data && data[val.name]}
               {...(val.type === "password" && { autoComplete: "on" })}
               {...(val.name === "emailProfile" || val.name === "answer"
                 ? { readOnly: true }
                 : { readOnly: false })}
               onChange={(e) => onChange(e, index, val)}
-              {...props}
             ></input>
             <div className="errorMsg mb-3">{errors && errors[val.name]}</div>
           </div>
         );
       })}
-      <ButtonField type="submit" variant="primary" value="Submit"></ButtonField>
+      {submitDisable ? (
+        ""
+      ) : (
+        <ButtonField
+          type="submit"
+          variant="primary"
+          value="Submit"
+        ></ButtonField>
+      )}
     </>
   );
 }
@@ -46,3 +48,6 @@ InputFields.propTypes = {
 };
 
 export default InputFields;
+
+//radio button explanation
+// http://react.tips/radio-buttons-in-reactjs/
