@@ -3,8 +3,8 @@ import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
 function InputFields({ fields, data, errors, onChange, check, submitDisable }) {
-  // console.log(check)
-
+  // console.log(check)  //we have to specify condition Here to continue with radio button
+ 
   return (
     <>
       {fields.data.map((val, index) => {
@@ -15,7 +15,7 @@ function InputFields({ fields, data, errors, onChange, check, submitDisable }) {
               type={val.type}
               name={val.name}
               placeholder={val.placeholder}
-              checked={val.type === "radio" && check}
+              checked={check} //val.type === "radio" && data && data[val.name]===
               value={val.value ? val.value : data && data[val.name]}
               {...(val.type === "password" && { autoComplete: "on" })}
               {...(val.name === "emailProfile" || val.name === "answer"

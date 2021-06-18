@@ -130,7 +130,6 @@ export const questionAry = {
       type: "text",
       name: "opt1",
       placeholder: "Enter Option",
-      textVal: true,
     },
     {
       type: "radio",
@@ -141,7 +140,6 @@ export const questionAry = {
       type: "text",
       name: "opt2",
       placeholder: "Enter Option",
-      textVal: true,
     },
     {
       type: "radio",
@@ -152,7 +150,6 @@ export const questionAry = {
       type: "text",
       name: "opt3",
       placeholder: "Enter Option",
-      textVal: true,
     },
     {
       type: "radio",
@@ -163,7 +160,6 @@ export const questionAry = {
       type: "text",
       name: "opt4",
       placeholder: "Enter Option",
-      textVal: true,
     },
     {
       type: "text",

@@ -1,8 +1,13 @@
 /* eslint-disable */
 
-export const ButtonField = ({ variant, type, value ,...props}) => {
+export const ButtonField = ({ variant, type, value ,disable,cursorPoint,...props}) => {
   return (
-    <button className={`btn btn-${variant}`} {...props}>
+    <button
+      className={variant ? `btn btn-${variant}` : "btn btn-primary"}
+      disabled={disable}
+      style={cursorPoint &&{...{cursor:'not-allowed' ,pointerEvents:'all'}}}
+      {...props}
+    >
       {value}
     </button>
   );
