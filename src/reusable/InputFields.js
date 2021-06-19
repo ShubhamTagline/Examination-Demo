@@ -2,8 +2,7 @@ import React from "react";
 import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
-function InputFields({ fields, data, errors, onChange, check, submitDisable }) {
-  // console.log(check)  //we have to specify condition Here to continue with radio button
+function InputFields({ fields, data, errors, onChange,submitDisable }) {
  
   return (
     <>
@@ -15,7 +14,7 @@ function InputFields({ fields, data, errors, onChange, check, submitDisable }) {
               type={val.type}
               name={val.name}
               placeholder={val.placeholder}
-              checked={check} //val.type === "radio" && data && data[val.name]===
+              // checked={check} //val.type === "radio" && data && data[val.name]===
               value={val.value ? val.value : data && data[val.name]}
               {...(val.type === "password" && { autoComplete: "on" })}
               {...(val.name === "emailProfile" || val.name === "answer"
@@ -48,6 +47,11 @@ InputFields.propTypes = {
 };
 
 export default InputFields;
+
+
+
+
+
 
 //radio button explanation
 // http://react.tips/radio-buttons-in-reactjs/
