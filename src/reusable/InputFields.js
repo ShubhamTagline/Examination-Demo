@@ -3,8 +3,7 @@ import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
 function InputFields({ fields, data, errors, onChange,submitDisable }) {
- 
-  return (
+  return ( 
     <>
       {fields.data.map((val, index) => {
         return (
@@ -14,8 +13,11 @@ function InputFields({ fields, data, errors, onChange,submitDisable }) {
               type={val.type}
               name={val.name}
               placeholder={val.placeholder}
-              // checked={check} //val.type === "radio" && data && data[val.name]===
               value={val.value ? val.value : data && data[val.name]}
+              checked={
+                data.answer &&
+                data[fields?.data[index + 1]?.name] === data.answer
+              }
               {...(val.type === "password" && { autoComplete: "on" })}
               {...(val.name === "emailProfile" || val.name === "answer"
                 ? { readOnly: true }
@@ -26,9 +28,7 @@ function InputFields({ fields, data, errors, onChange,submitDisable }) {
           </div>
         );
       })}
-      {submitDisable ? (
-        ""
-      ) : (
+      {submitDisable ? null : (
         <ButtonField
           type="submit"
           variant="primary"
@@ -48,10 +48,6 @@ InputFields.propTypes = {
 
 export default InputFields;
 
-
-
-
-
-
 //radio button explanation
 // http://react.tips/radio-buttons-in-reactjs/
+//https://stackoverflow.com/questions/48014390/how-to-handle-multiple-radio-button-groups-in-one-component-in-reactjs

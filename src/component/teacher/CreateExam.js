@@ -13,7 +13,6 @@ function CreateExam() {
     opt3: "",
     opt4: "",
     answer: "",
-    option: "",
   };
 
   const [item, setItem] = useState(initialState);
@@ -32,7 +31,7 @@ function CreateExam() {
     if (name === "subjectName") {
       result.subjectName = value;
     }
-
+    console.log(`index`, index)
     if (index === 1) {
       item.answer = item.opt1;
     } else if (index === 3) {
@@ -42,12 +41,12 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
-
+    
     setItem({
       ...item,
       [name]: value,
-    });
-  };
+    })
+   }  
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -62,6 +61,7 @@ function CreateExam() {
     cloneResult.questions.push(data);
     setResult(cloneResult);
     localStorage.setItem("examPaper", JSON.stringify(result));
+    console.log(result)
     setItem(initialState);
     setCurrentQuestion(result.questions.length);
   };
@@ -74,37 +74,37 @@ function CreateExam() {
     alert("Quiz Successfully Submit");
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    const page = currentQuestion + 1;
-    handlePage(page);
+  const handlePage = (page) => {
+    let dummy = result.questions[page];
+    setCurrentQuestion(page);
+
+    let cloneItem = { ...item };
+    cloneItem.question = dummy.question;
+    cloneItem.answer = dummy.answer;
+    cloneItem.opt1 = dummy.options[0];
+    cloneItem.opt2 = dummy.options[1];
+    cloneItem.opt3 = dummy.options[2];
+    cloneItem.opt4 = dummy.options[3];
+    setItem(cloneItem);
   };
-
-  const handlePage=(page)=>{
-     let dummy = result.questions[page];
-     setCurrentQuestion(page);
-
-     let cloneItem = { ...item };
-     cloneItem.question = dummy.question;
-     cloneItem.answer = dummy.answer;
-     cloneItem.opt1 = dummy.options[0];
-     cloneItem.opt2 = dummy.options[1];
-     cloneItem.opt3 = dummy.options[2];
-     cloneItem.opt4 = dummy.options[3];
-     setItem(cloneItem);
-  }
 
   const handlePrevious = (e) => {
     e.preventDefault();
     let page = currentQuestion - 1;
-    handlePage(page)
-  };
+    handlePage(page);
+   };
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    const page = currentQuestion + 1;
+    handlePage(page);
+   };
 
   const handleReset = (e) => {
     e.preventDefault();
     setItem(initialState);
   };
- 
+
   return (
     <div>
       <h1>Create Exam Module</h1>
@@ -129,9 +129,9 @@ function CreateExam() {
           <ButtonField value="Add" onClick={handleClick} />
         )}
         &nbsp;&nbsp;
-        {result.questions.length > currentQuestion + 1  ? (
+        {result.questions.length > currentQuestion + 1 ? (
           <ButtonField value="Next" onClick={handleNext} />
-          ) : (
+        ) : (
           <ButtonField value="Next" disable={true} cursorPoint={true} />
         )}
         &nbsp;&nbsp;

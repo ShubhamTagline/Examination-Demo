@@ -124,7 +124,7 @@ export const questionAry = {
     {
       type: "radio",
       name: "option",
-      label: "A",
+      label: "A"
     },
     {
       type: "text",
@@ -134,7 +134,7 @@ export const questionAry = {
     {
       type: "radio",
       name: "option",
-      label: "B",
+      label: "B"
     },
     {
       type: "text",
@@ -144,7 +144,7 @@ export const questionAry = {
     {
       type: "radio",
       name: "option",
-      label: "C",
+      label: "C"
     },
     {
       type: "text",
@@ -154,7 +154,7 @@ export const questionAry = {
     {
       type: "radio",
       name: "option",
-      label: "D",
+      label: "D"
     },
     {
       type: "text",
