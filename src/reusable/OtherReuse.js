@@ -25,7 +25,7 @@ export const validName = (value) => {
     return "*Required";
   }
   if (value.length < 2) {
-    return "Name is Too Short";
+    return "Value is too Short";
   }
   return "";
 };
@@ -63,3 +63,4 @@ export const alertMsg=()=>{
 export const localGet = (val) => {
    return localStorage.getItem(val);
  };
+  

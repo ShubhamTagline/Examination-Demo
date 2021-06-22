@@ -3,7 +3,7 @@ import { useState } from "react";
 import { questionAry, subjectAry } from "../../contain/FormAry";
 import InputFields from "../../reusable/InputFields";
 import OptionField from "../../reusable/OptionField";
-import { ButtonField } from "../../reusable/OtherReuse";
+import { alertMsg, ButtonField, validateForm, validName } from "../../reusable/OtherReuse";
 
 function CreateExam() {
   const initialState = {
@@ -13,6 +13,15 @@ function CreateExam() {
     opt3: "",
     opt4: "",
     answer: "",
+    errors:{
+      subjectName:" ",
+      question:" ",
+      opt1:" ",
+      opt2:" ",
+      opt3:" ",
+      opt4:" ",
+      answer:" "
+    }
   };
 
   const [item, setItem] = useState(initialState);
@@ -24,14 +33,40 @@ function CreateExam() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const handleChange = (e, index, val) => {
+  const handleChange = (e, index) => {
     const name = e.target.name;
     const value = e.target.value;
+    let errors =item.errors
+
+    switch (name) {
+      case "question":
+        errors.question = validName(value);
+        break;
+
+      case "opt1":
+        errors.opt1 = validName(value);
+        break;
+
+      case "opt2":
+        errors.opt2 = validName(value);
+        break;
+
+      case "opt3":
+        errors.opt3 = validName(value);
+        break;
+
+      case "opt4":
+        errors.opt4 = validName(value);
+        break;
+      default:
+        break;
+    }
 
     if (name === "subjectName") {
+      errors.subjectName =validName(value)
       result.subjectName = value;
     }
-    console.log(`index`, index)
+ 
     if (index === 1) {
       item.answer = item.opt1;
     } else if (index === 3) {
@@ -41,29 +76,37 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
-    
+   
     setItem({
       ...item,
       [name]: value,
     })
    }  
-
+ 
   const handleClick = (e) => {
     e.preventDefault();
-    const optionAry = [];
-    optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
+    if(item.answer!==null){
+      item.errors.answer=""
+    }
+    if (validateForm(item.errors)) {
+      const optionAry = [];
+      optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
 
-    const data = {};
-    data.question = item.question;
-    data.answer = item.answer;
-    data.options = optionAry;
-    let cloneResult = { ...result };
-    cloneResult.questions.push(data);
-    setResult(cloneResult);
-    localStorage.setItem("examPaper", JSON.stringify(result));
-    console.log(result)
-    setItem(initialState);
-    setCurrentQuestion(result.questions.length);
+      const data = {};
+      data.question = item.question;
+      data.answer = item.answer;
+      data.options = optionAry;
+      let cloneResult = { ...result };
+      cloneResult.questions.push(data);
+      setResult(cloneResult);
+      localStorage.setItem("examPaper", JSON.stringify(result));
+      setItem(initialState);
+      setCurrentQuestion(result.questions.length);
+    }else{
+      alertMsg();
+    }
+    console.log(`item.errors`, item.errors);
+    console.log(result);
   };
  
   const handleSubmit = (e) => {
@@ -116,12 +159,13 @@ function CreateExam() {
           disable={result.questions.length !== 0 ? true : false}
         ></OptionField>
         <br />
-        <p>{currentQuestion + 1}/15</p>
+        <p>{(currentQuestion + 1)}/15</p>
         <InputFields
           fields={questionAry}
           data={item}
           onChange={handleChange}
           submitDisable={true}
+          errors={item.errors}
         ></InputFields>
         {result.questions.length >= 14 ? (
           <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
