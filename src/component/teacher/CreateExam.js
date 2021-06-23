@@ -60,7 +60,6 @@ function CreateExam() {
         errors.subjectName = validName(value);
         setResult({ ...result, subjectName: value });
         break;
-
       default:
         break;
     }
@@ -74,7 +73,6 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
-
     if (item.answer !== "") {
       item.errors.answer = "";
     }
@@ -132,15 +130,15 @@ function CreateExam() {
   };
 
   const handlePage = (page) => {
-    let dummy = result.questions[page];
+    let tempData = result.questions[page];
     setCurrentQuestion(page);
     let cloneItem = { ...item };
-    cloneItem.question = dummy.question;
-    cloneItem.answer = dummy.answer;
-    cloneItem.opt1 = dummy.options[0];
-    cloneItem.opt2 = dummy.options[1];
-    cloneItem.opt3 = dummy.options[2];
-    cloneItem.opt4 = dummy.options[3];
+    cloneItem.question = tempData.question;
+    cloneItem.answer = tempData.answer;
+    cloneItem.opt1 = tempData.options[0];
+    cloneItem.opt2 = tempData.options[1];
+    cloneItem.opt3 = tempData.options[2];
+    cloneItem.opt4 = tempData.options[3];
     setItem(cloneItem);
   };
 
@@ -162,10 +160,41 @@ function CreateExam() {
   };
   
   const handleUpdate=(e)=>{
-    e.preventDefault()
-    alert('Update Button')
+    e.preventDefault();
+    
+    setItem({
+      ...item,
+      errors:{
+        subjectName:""
+      }
+    })
+
+    //find a solution of item.errors.subjectName===" " ,initialState nu ave che tene Change kari ne item.errors.subjectName==="" karva nu 6 :::: hint result.subjectName hoy to aane "" karavi devani ..
+
+    // if (result.subjectName === "") {
+    //   let cloneError = { ...item };
+    //   cloneError.errors.subjectName = "SubjectName not Valid";
+    //   setItem(cloneError);
+    // } else {
+    //   item.errors.opt1 = "";
+    // }
+
+    if (validateForm(item.errors)) {
+      const optionAry = [];
+      optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
+      const data = {};
+      data.question = item.question;
+      data.answer = item.answer;
+      data.options = optionAry;
+      let cloneResult = { ...result };
+      cloneResult.questions[currentQuestion] = data;
+      setResult(cloneResult);
+      alert("Question Updated");
+    } else {
+      alert("Please fill proper form");
+    }
   }
-  
+
   return (
     <div>
       <h1>Create Exam Module</h1>
