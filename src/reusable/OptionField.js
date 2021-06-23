@@ -1,7 +1,6 @@
 import React from "react";
 
-function OptionField({ values, name, onChange, disable }) {
-  // console.log(disable)
+function OptionField({ values, name, onChange, disable,errors }) {
   return (
     <>
       <select
@@ -21,6 +20,7 @@ function OptionField({ values, name, onChange, disable }) {
           </React.Fragment>
         ))}
       </select>
+      <p className="errorMsg">{errors && errors}</p>
     </>
   );
 }

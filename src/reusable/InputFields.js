@@ -2,7 +2,8 @@ import React from "react";
 import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
-function InputFields({ fields, data, errors, onChange,submitDisable }) {
+function InputFields({ fields, data, errors, onChange,submitDisable}) {
+  // console.log(`errors`, errors)
   return ( 
     <>
       {fields.data.map((val, index) => {
