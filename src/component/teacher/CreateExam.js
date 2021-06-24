@@ -42,19 +42,19 @@ function CreateExam() {
 
     switch (name) {
       case "question":
-        errors.question = validName(value);
+        errors.question = validName(value, "Question");
         break;
       case "opt1":
-        errors.opt1 = validName(value);
+        errors.opt1 = validName(value, "Option");
         break;
       case "opt2":
-        errors.opt2 = validName(value);
+        errors.opt2 = validName(value, "Option");
         break;
       case "opt3":
-        errors.opt3 = validName(value);
+        errors.opt3 = validName(value, "Option");
         break;
       case "opt4":
-        errors.opt4 = validName(value);
+        errors.opt4 = validName(value, "Option");
         break;
       case "subjectName":
         errors.subjectName = validName(value);
@@ -73,13 +73,15 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
+
     if (item.answer !== "") {
       item.errors.answer = "";
     }
 
     setItem({
       ...item,
-      [name]: value,
+      [name]: value ? value.trim() && value.replace(/\s+/g, " ") : value,
+      errors,
     });
   };
 
@@ -94,7 +96,6 @@ function CreateExam() {
         item.errors[question] = "";
       }
     };
-
     const optionMsg = "Please Enter Option";
     validData(result.subjectName, "subjectName", "Please Choose Subject");
     validData(item.question, "question", "Please Enter Question");
@@ -150,34 +151,31 @@ function CreateExam() {
 
   const handleNext = (e) => {
     e.preventDefault();
-    const page = currentQuestion + 1;
-    handlePage(page);
+    if (result.questions.length - currentQuestion === 1) {
+      setCurrentQuestion(currentQuestion+1) 
+      setItem(initialState)
+    }else{
+      let page = currentQuestion + 1;
+      handlePage(page);
+    }
   };
 
-  const handleReset = (e) => {
+  const handleUpdate = (e) => {
     e.preventDefault();
-    setItem(initialState);
-  };
-  
-  const handleUpdate=(e)=>{
-    e.preventDefault();
-    
-    setItem({
-      ...item,
-      errors:{
-        subjectName:""
+    const validateUpdate = (val, newVal) => {
+      if (val === " ") {
+        let cloneQuestion = { ...item };
+        cloneQuestion.errors[newVal] = "";
+        setItem(cloneQuestion);
       }
-    })
-
-    //find a solution of item.errors.subjectName===" " ,initialState nu ave che tene Change kari ne item.errors.subjectName==="" karva nu 6 :::: hint result.subjectName hoy to aane "" karavi devani ..
-
-    // if (result.subjectName === "") {
-    //   let cloneError = { ...item };
-    //   cloneError.errors.subjectName = "SubjectName not Valid";
-    //   setItem(cloneError);
-    // } else {
-    //   item.errors.opt1 = "";
-    // }
+    };
+    validateUpdate(item.errors.opt1, "opt1");
+    validateUpdate(item.errors.opt2, "opt2");
+    validateUpdate(item.errors.opt3, "opt3");
+    validateUpdate(item.errors.opt4, "opt4");
+    validateUpdate(item.errors.subjectName, "subjectName");
+    validateUpdate(item.errors.question, "question");
+    validateUpdate(item.errors.answer, "answer");
 
     if (validateForm(item.errors)) {
       const optionAry = [];
@@ -189,11 +187,11 @@ function CreateExam() {
       let cloneResult = { ...result };
       cloneResult.questions[currentQuestion] = data;
       setResult(cloneResult);
-      alert("Question Updated");
+      console.log(`result`, result);
     } else {
-      alert("Please fill proper form");
+      alert("Please Fill Proper Form");
     }
-  }
+  };
 
   return (
     <div>
@@ -216,13 +214,13 @@ function CreateExam() {
         ></InputFields>
         {result.questions.length >= 14 ? (
           <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
-        ) : (result.questions.length !== currentQuestion ? (
-          <ButtonField value="Update" onClick={handleUpdate}/>
+        ) : result.questions.length !== currentQuestion ? (
+          <ButtonField value="Update" onClick={handleUpdate} />
         ) : (
-          <ButtonField value="Add" onClick={handleClick}/>
-        ))}
+          <ButtonField value="Add" onClick={handleClick} />
+        )}
         &nbsp;&nbsp;
-        {result.questions.length > currentQuestion + 1 ? (
+        {result.questions.length > currentQuestion ? (
           <ButtonField value="Next" onClick={handleNext} />
         ) : (
           <ButtonField value="Next" disable={true} cursorPoint={true} />
@@ -233,11 +231,8 @@ function CreateExam() {
         ) : (
           <ButtonField value="Previous" onClick={handlePrevious} />
         )}
-        &nbsp;&nbsp;
-        <ButtonField value="Reset" onClick={handleReset} />
       </form>
     </div>
   );
 }
-
 export default CreateExam;

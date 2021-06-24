@@ -19,12 +19,12 @@ export const validateForm = (errors) => {
   return valid;
 };
 
-export const validName = (value) => {
+export const validName = (value,name) => {
   if (value.trim() === "") {
-    return "*Required";
+    return  `${name} is Required`
   }
   if (value.length < 2) {
-    return "Value is too Short";
+    return `${name} is too Short`
   }
   return "";
 };
