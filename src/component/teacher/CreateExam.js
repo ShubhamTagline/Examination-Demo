@@ -169,6 +169,7 @@ function CreateExam() {
       }
     })
 
+    //Testing git from my leptop
     //find a solution of item.errors.subjectName===" " ,initialState nu ave che tene Change kari ne item.errors.subjectName==="" karva nu 6 :::: hint result.subjectName hoy to aane "" karavi devani ..
 
     // if (result.subjectName === "") {
