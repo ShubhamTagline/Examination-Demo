@@ -10,6 +10,7 @@ import {
 } from "../../reusable/OtherReuse";
 
 function CreateExam() {
+  console.log("leptop")
   const initialState = {
     question: "",
     opt1: "",
