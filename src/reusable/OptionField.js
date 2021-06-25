@@ -1,13 +1,13 @@
 import React from "react";
 
-function OptionField({ values, name, onChange, disable,errors }) {
-  return (
+function OptionField({ values, name, data, onChange, disable, errors }) {
+   return (
     <>
       <select
         name={name}
         disabled={disable}
         onChange={onChange}
-        defaultValue="Choose here"
+        defaultValue={data ? data : "Choose here"}
       >
         {values.data.map((val, index) => (
           <React.Fragment key={index}>

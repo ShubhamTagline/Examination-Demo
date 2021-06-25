@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable */
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { questionAry, subjectAry } from "../../contain/FormAry";
 import InputFields from "../../reusable/InputFields";
@@ -6,18 +7,19 @@ import OptionField from "../../reusable/OptionField";
 import {
   ButtonField,
   validateForm,
+  validateFormNext,
   validName,
 } from "../../reusable/OtherReuse";
 
 function CreateExam() {
-  console.log("leptop")
   const initialState = {
     question: "",
     opt1: "",
-    opt2: "",
+    opt2: "", 
     opt3: "",
     opt4: "",
     answer: "",
+    subjectName: "",
     errors: {
       subjectName: " ",
       question: " ",
@@ -29,12 +31,12 @@ function CreateExam() {
     },
   };
 
+  const storageItem = JSON.parse(localStorage.getItem("examPaper"));
+
   const [item, setItem] = useState(initialState);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [result, setResult] = useState({
-    subjectName: "",
-    questions: [],
-  });
+  const [currentQuestion, setCurrentQuestion] = useState(
+    (storageItem && storageItem.questions.length) || 0
+  );
 
   const handleChange = (e, index) => {
     const name = e.target.name;
@@ -59,7 +61,6 @@ function CreateExam() {
         break;
       case "subjectName":
         errors.subjectName = validName(value);
-        setResult({ ...result, subjectName: value });
         break;
       default:
         break;
@@ -86,8 +87,31 @@ function CreateExam() {
     });
   };
 
+  useEffect(() => {
+    storageItem && setCurrentQuestion(currentQuestion - 1);
+    if (storageItem) {
+      const tempStorage = storageItem.questions[currentQuestion - 1];
+      let cloneItem = { ...item };
+      cloneItem.question = tempStorage.question;
+      cloneItem.answer = tempStorage.answer;
+      cloneItem.opt1 = tempStorage.options[0];
+      cloneItem.opt2 = tempStorage.options[1];
+      cloneItem.opt3 = tempStorage.options[2];
+      cloneItem.opt4 = tempStorage.options[3];
+      cloneItem.subjectName = storageItem.subjectName;
+      setItem(cloneItem);
+    } else {
+      setItem(initialState);
+    }
+  }, []);
+
   const handleClick = (e) => {
     e.preventDefault();
+    if (storageItem.subjectName) {
+      let tempRecord = { ...item };
+      item.errors.subjectName = "";
+      setItem(tempRecord);
+    }
     const validData = (itemVal, question, msg) => {
       if (itemVal === "") {
         let cloneError = { ...item };
@@ -98,7 +122,8 @@ function CreateExam() {
       }
     };
     const optionMsg = "Please Enter Option";
-    validData(result.subjectName, "subjectName", "Please Choose Subject");
+    currentQuestion === 0 &&
+      validData(item.subjectName, "subjectName", "Please Choose Subject");
     validData(item.question, "question", "Please Enter Question");
     validData(item.opt1, "opt1", optionMsg);
     validData(item.opt2, "opt2", optionMsg);
@@ -113,26 +138,36 @@ function CreateExam() {
       data.question = item.question;
       data.answer = item.answer;
       data.options = optionAry;
-      let cloneResult = { ...result };
-      cloneResult.questions.push(data);
-      setResult(cloneResult);
-      localStorage.setItem("examPaper", JSON.stringify(result));
+      let structureItem = {
+        subjectName: "",
+        questions: [],
+      };
+      if (storageItem) {
+        let tempData = storageItem;
+        tempData.questions.push(data);
+        localStorage.setItem("examPaper", JSON.stringify(tempData));
+      } else {
+        structureItem.subjectName = item.subjectName;
+        structureItem.questions.push(data);
+        localStorage.setItem("examPaper", JSON.stringify(structureItem));
+      }
       setItem(initialState);
-      setCurrentQuestion(result.questions.length);
-      console.log(`Result`, result);
+      const storageResult = JSON.parse(localStorage.getItem("examPaper"));
+      setCurrentQuestion(storageResult.questions.length);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleClick(e);
+    localStorage.removeItem("examPaper");
     window.location.reload();
-    console.log(result);
+    console.log(storageItem);
     alert("Quiz Successfully Submit");
   };
 
   const handlePage = (page) => {
-    let tempData = result.questions[page];
+    let tempData = storageItem.questions[page];
     setCurrentQuestion(page);
     let cloneItem = { ...item };
     cloneItem.question = tempData.question;
@@ -146,51 +181,50 @@ function CreateExam() {
 
   const handlePrevious = (e) => {
     e.preventDefault();
-    let page = currentQuestion - 1;
-    handlePage(page);
+    if (validateFormNext(item.errors)) {
+      let page = currentQuestion - 1;
+      handlePage(page);
+    }
   };
 
   const handleNext = (e) => {
     e.preventDefault();
-    if (result.questions.length - currentQuestion === 1) {
-      setCurrentQuestion(currentQuestion+1) 
-      setItem(initialState)
-    }else{
-      let page = currentQuestion + 1;
-      handlePage(page);
+    if (storageItem.questions.length - currentQuestion === 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setItem(initialState);
+    } else {
+      if (validateFormNext(item.errors)) {
+        let page = currentQuestion + 1;
+        handlePage(page);
+      }
     }
   };
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    const validateUpdate = (val, newVal) => {
-      if (val === " ") {
-        let cloneQuestion = { ...item };
-        cloneQuestion.errors[newVal] = "";
-        setItem(cloneQuestion);
+    if (validateFormNext(item.errors)) {
+      if (confirm("Are you sure you want to Update Question")) {
+        const optionAry = [];
+        optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
+        const data = {};
+        data.question = item.question;
+        data.answer = item.answer;
+        data.options = optionAry;
+        const tempData = storageItem;
+        tempData.subjectName = item.subjectName;
+        tempData.questions[currentQuestion] = data;
+        localStorage.setItem("examPaper", JSON.stringify(tempData));
+      } else {
+        let cloneItem = { ...item };
+        const tempVar = storageItem.questions[currentQuestion];
+        cloneItem.question = storageItem.questions[currentQuestion].question;
+        cloneItem.opt1 = tempVar.options[0];
+        cloneItem.opt2 = tempVar.options[1];
+        cloneItem.opt3 = tempVar.options[2];
+        cloneItem.opt4 = tempVar.options[3];
+        cloneItem.answer = tempVar.answer;
+        setItem(cloneItem);
       }
-    };
-    validateUpdate(item.errors.opt1, "opt1");
-    validateUpdate(item.errors.opt2, "opt2");
-    validateUpdate(item.errors.opt3, "opt3");
-    validateUpdate(item.errors.opt4, "opt4");
-    validateUpdate(item.errors.subjectName, "subjectName");
-    validateUpdate(item.errors.question, "question");
-    validateUpdate(item.errors.answer, "answer");
-
-    if (validateForm(item.errors)) {
-      const optionAry = [];
-      optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
-      const data = {};
-      data.question = item.question;
-      data.answer = item.answer;
-      data.options = optionAry;
-      let cloneResult = { ...result };
-      cloneResult.questions[currentQuestion] = data;
-      setResult(cloneResult);
-      console.log(`result`, result);
-    } else {
-      alert("Please Fill Proper Form");
     }
   };
 
@@ -200,9 +234,10 @@ function CreateExam() {
       <form>
         <OptionField
           values={subjectAry}
+          data={storageItem && storageItem.subjectName}
           name="subjectName"
           onChange={handleChange}
-          disable={result.questions.length !== 0 ? true : false}
+          disable={currentQuestion !== 0 ? true : false}
           errors={item.errors.subjectName}
         ></OptionField>
         <p>{currentQuestion + 1}/15</p>
@@ -213,15 +248,15 @@ function CreateExam() {
           submitDisable={true}
           errors={item.errors}
         ></InputFields>
-        {result.questions.length >= 14 ? (
+        {storageItem && storageItem.questions.length === 14 ? (
           <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
-        ) : result.questions.length !== currentQuestion ? (
+        ) : storageItem && storageItem.questions.length !== currentQuestion ? (
           <ButtonField value="Update" onClick={handleUpdate} />
         ) : (
           <ButtonField value="Add" onClick={handleClick} />
         )}
         &nbsp;&nbsp;
-        {result.questions.length > currentQuestion ? (
+        {storageItem && storageItem.questions.length > currentQuestion ? (
           <ButtonField value="Next" onClick={handleNext} />
         ) : (
           <ButtonField value="Next" disable={true} cursorPoint={true} />

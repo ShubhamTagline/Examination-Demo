@@ -18,6 +18,13 @@ export const validateForm = (errors) => {
     Object.values(errors).some((val) => val.length > 0 && (valid = false));
   return valid;
 };
+ 
+export const validateFormNext = (errors) => {
+  let valid = true;
+  errors &&
+    Object.values(errors).some((val) => val.length > 2 && (valid = false));
+  return valid;
+};
 
 export const validName = (value,name) => {
   if (value.trim() === "") {
