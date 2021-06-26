@@ -30,9 +30,6 @@ export const validName = (value,name) => {
   if (value.trim() === "") {
     return  `${name} is Required`
   }
-  if (value.length < 2) {
-    return `${name} is too Short`
-  }
   return "";
 };
 

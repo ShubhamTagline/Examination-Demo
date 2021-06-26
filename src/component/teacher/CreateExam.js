@@ -6,16 +6,18 @@ import InputFields from "../../reusable/InputFields";
 import OptionField from "../../reusable/OptionField";
 import {
   ButtonField,
+  localGet,
   validateForm,
   validateFormNext,
   validName,
 } from "../../reusable/OtherReuse";
+import { reuseApi } from "../../reusable/ReuseApi";
 
 function CreateExam() {
   const initialState = {
     question: "",
     opt1: "",
-    opt2: "", 
+    opt2: "",
     opt3: "",
     opt4: "",
     answer: "",
@@ -66,11 +68,6 @@ function CreateExam() {
         break;
     }
 
-    //Notes Value 
-    if(name==="notes"){
-      console.log(`notes: `, value)
-    }
-
     if (index === 1) {
       item.answer = item.opt1;
     } else if (index === 3) {
@@ -80,7 +77,6 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
-
     if (item.answer !== "") {
       item.errors.answer = "";
     }
@@ -95,7 +91,8 @@ function CreateExam() {
   useEffect(() => {
     storageItem && setCurrentQuestion(currentQuestion - 1);
     if (storageItem) {
-      const tempStorage = storageItem && storageItem.questions[currentQuestion - 1];
+      const tempStorage =
+        storageItem && storageItem.questions[currentQuestion - 1];
       let cloneItem = { ...item };
       cloneItem.question = tempStorage.question;
       cloneItem.answer = tempStorage.answer;
@@ -112,7 +109,7 @@ function CreateExam() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    if (storageItem.subjectName) {
+    if (storageItem && storageItem.subjectName) {
       let tempRecord = { ...item };
       item.errors.subjectName = "";
       setItem(tempRecord);
@@ -143,15 +140,20 @@ function CreateExam() {
       data.question = item.question;
       data.answer = item.answer;
       data.options = optionAry;
-      let structureItem = {
-        subjectName: "",
-        questions: [],
-      };
       if (storageItem) {
         let tempData = storageItem;
         tempData.questions.push(data);
+        let dummy = [];
+        dummy.push(note);
+        {
+          note ? (tempData.notes = dummy) : (tempData.notes = []);
+        }
         localStorage.setItem("examPaper", JSON.stringify(tempData));
       } else {
+        let structureItem = {
+          subjectName: "",
+          questions: [],
+        };
         structureItem.subjectName = item.subjectName;
         structureItem.questions.push(data);
         localStorage.setItem("examPaper", JSON.stringify(structureItem));
@@ -162,13 +164,20 @@ function CreateExam() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     handleClick(e);
-    localStorage.removeItem("examPaper");
-    window.location.reload();
-    console.log(storageItem);
-    alert("Quiz Successfully Submit");
+    if (validateForm(item.errors)) {
+      const data = storageItem;
+      console.log(data);
+      const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
+        "access-token": localGet("token"),
+      });
+      console.log(response);
+      alert(response.data.message);
+      localStorage.removeItem("examPaper");
+      window.location.reload();
+    }
   };
 
   const handlePage = (page) => {
@@ -207,6 +216,7 @@ function CreateExam() {
 
   const handleUpdate = (e) => {
     e.preventDefault();
+
     if (validateFormNext(item.errors)) {
       if (confirm("Are you sure you want to Update Question")) {
         const optionAry = [];
@@ -216,7 +226,7 @@ function CreateExam() {
         data.answer = item.answer;
         data.options = optionAry;
         const tempData = storageItem;
-        tempData.subjectName = item.subjectName;
+        currentQuestion === 0 && (tempData.subjectName = item.subjectName);
         tempData.questions[currentQuestion] = data;
         localStorage.setItem("examPaper", JSON.stringify(tempData));
       } else {
@@ -231,6 +241,11 @@ function CreateExam() {
         setItem(cloneItem);
       }
     }
+  };
+
+  const [note, setNote] = useState();
+  const handleNotes = (e) => {
+    setNote(e.target.value);
   };
 
   return (
@@ -253,9 +268,18 @@ function CreateExam() {
           submitDisable={true}
           errors={item.errors}
         ></InputFields>
-        {storageItem && storageItem.questions.length === 14 && <textarea placeholder="Enter Notes" name="notes" rows="3" cols="35" onChange={handleChange}></textarea> }
-        {storageItem && storageItem.questions.length === 14 ? (
-          <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
+        {currentQuestion === 14 ? (
+          <>
+            <textarea
+              placeholder="Enter Notes"
+              name="notes"
+              rows="3"
+              cols="35"
+              onChange={handleNotes}
+            />{" "}
+            <br />{" "}
+            <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
+          </>
         ) : storageItem && storageItem.questions.length !== currentQuestion ? (
           <ButtonField value="Update" onClick={handleUpdate} />
         ) : (
@@ -279,7 +303,4 @@ function CreateExam() {
 }
 export default CreateExam;
 
-
-// Today Task 
-// 1] Common Logics Resuse Makes a function 
-// 2] last question Not Text Area Field Come and push it data in to array.
+// https://medium.com/sonny-sangha/how-to-make-a-weather-app-with-react-js-47f2a9eaf054
