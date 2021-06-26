@@ -66,6 +66,11 @@ function CreateExam() {
         break;
     }
 
+    //Notes Value 
+    if(name==="notes"){
+      console.log(`notes: `, value)
+    }
+
     if (index === 1) {
       item.answer = item.opt1;
     } else if (index === 3) {
@@ -90,7 +95,7 @@ function CreateExam() {
   useEffect(() => {
     storageItem && setCurrentQuestion(currentQuestion - 1);
     if (storageItem) {
-      const tempStorage = storageItem.questions[currentQuestion - 1];
+      const tempStorage = storageItem && storageItem.questions[currentQuestion - 1];
       let cloneItem = { ...item };
       cloneItem.question = tempStorage.question;
       cloneItem.answer = tempStorage.answer;
@@ -248,6 +253,7 @@ function CreateExam() {
           submitDisable={true}
           errors={item.errors}
         ></InputFields>
+        {storageItem && storageItem.questions.length === 14 && <textarea placeholder="Enter Notes" name="notes" rows="3" cols="35" onChange={handleChange}></textarea> }
         {storageItem && storageItem.questions.length === 14 ? (
           <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
         ) : storageItem && storageItem.questions.length !== currentQuestion ? (
@@ -272,3 +278,8 @@ function CreateExam() {
   );
 }
 export default CreateExam;
+
+
+// Today Task 
+// 1] Common Logics Resuse Makes a function 
+// 2] last question Not Text Area Field Come and push it data in to array.
