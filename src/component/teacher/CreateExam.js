@@ -125,7 +125,7 @@ function CreateExam() {
     };
     const optionMsg = "Please Enter Option";
     currentQuestion === 0 &&
-      validData(item.subjectName, "subjectName", "Please Choose Subject");
+    validData(item.subjectName, "subjectName", "Please Choose Subject");
     validData(item.question, "question", "Please Enter Question");
     validData(item.opt1, "opt1", optionMsg);
     validData(item.opt2, "opt2", optionMsg);
@@ -146,7 +146,7 @@ function CreateExam() {
         let dummy = [];
         dummy.push(note);
         {
-          note ? (tempData.notes = dummy) : (tempData.notes = []);
+          currentQuestion==14 && (note ? (tempData.notes = dummy) : (tempData.notes = []));
         }
         localStorage.setItem("examPaper", JSON.stringify(tempData));
       } else {
@@ -242,7 +242,7 @@ function CreateExam() {
       }
     }
   };
-
+ 
   const [note, setNote] = useState();
   const handleNotes = (e) => {
     setNote(e.target.value);
@@ -260,7 +260,7 @@ function CreateExam() {
           disable={currentQuestion !== 0 ? true : false}
           errors={item.errors.subjectName}
         ></OptionField>
-        <p>{currentQuestion + 1}/15</p>
+       <p>{currentQuestion + 1}/15</p> 
         <InputFields
           fields={questionAry}
           data={item}
@@ -276,8 +276,8 @@ function CreateExam() {
               rows="3"
               cols="35"
               onChange={handleNotes}
-            />{" "}
-            <br />{" "}
+            /> 
+            <br />  
             <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
           </>
         ) : storageItem && storageItem.questions.length !== currentQuestion ? (
@@ -286,9 +286,9 @@ function CreateExam() {
           <ButtonField value="Add" onClick={handleClick} />
         )}
         &nbsp;&nbsp;
-        {storageItem && storageItem.questions.length > currentQuestion ? (
+        {storageItem && storageItem.questions.length > currentQuestion && currentQuestion!==14 ? (
           <ButtonField value="Next" onClick={handleNext} />
-        ) : (
+        ) : ( 
           <ButtonField value="Next" disable={true} cursorPoint={true} />
         )}
         &nbsp;&nbsp;
@@ -302,5 +302,4 @@ function CreateExam() {
   );
 }
 export default CreateExam;
-
-// https://medium.com/sonny-sangha/how-to-make-a-weather-app-with-react-js-47f2a9eaf054
+ 
