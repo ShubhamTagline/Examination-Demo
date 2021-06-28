@@ -107,6 +107,16 @@ function CreateExam() {
     }
   }, []);
 
+  const itemStructure=()=>{
+      const optionAry = [];
+      optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
+      const data = {};
+      data.question = item.question;
+      data.answer = item.answer;
+      data.options = optionAry;
+      return data  
+  }
+  
   const handleClick = (e) => {
     e.preventDefault();
     if (storageItem && storageItem.subjectName) {
@@ -134,12 +144,7 @@ function CreateExam() {
     validData(item.answer, "answer", "Please Select Correct Answer");
 
     if (validateForm(item.errors)) {
-      const optionAry = [];
-      optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
-      const data = {};
-      data.question = item.question;
-      data.answer = item.answer;
-      data.options = optionAry;
+      const data=itemStructure()
       if (storageItem) {
         let tempData = storageItem;
         tempData.questions.push(data);
@@ -169,7 +174,6 @@ function CreateExam() {
     handleClick(e);
     if (validateForm(item.errors)) {
       const data = storageItem;
-      console.log(data);
       const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
         "access-token": localGet("token"),
       });
@@ -216,15 +220,9 @@ function CreateExam() {
 
   const handleUpdate = (e) => {
     e.preventDefault();
-
     if (validateFormNext(item.errors)) {
       if (confirm("Are you sure you want to Update Question")) {
-        const optionAry = [];
-        optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
-        const data = {};
-        data.question = item.question;
-        data.answer = item.answer;
-        data.options = optionAry;
+        const data=itemStructure()
         const tempData = storageItem;
         currentQuestion === 0 && (tempData.subjectName = item.subjectName);
         tempData.questions[currentQuestion] = data;
