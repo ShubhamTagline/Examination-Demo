@@ -69,7 +69,7 @@ function CreateExam() {
       default:
         break;
     }
-    if (index === 1 ) {
+    if (index === 1) {
       item.answer = item.opt1;
     } else if (index === 3) {
       item.answer = item.opt2;
@@ -89,24 +89,18 @@ function CreateExam() {
     });
   };
 
-  useEffect(() => {
-    storageItem && setCurrentQuestion(currentQuestion - 1);
-    if (storageItem) {
-      const tempStorage =
-        storageItem && storageItem.questions[currentQuestion - 1];
-      let cloneItem = { ...item };
-      cloneItem.question = tempStorage.question;
-      cloneItem.answer = tempStorage.answer;
-      cloneItem.opt1 = tempStorage.options[0];
-      cloneItem.opt2 = tempStorage.options[1];
-      cloneItem.opt3 = tempStorage.options[2];
-      cloneItem.opt4 = tempStorage.options[3];
-      cloneItem.subjectName = storageItem.subjectName;
-      setItem(cloneItem);
-    } else {
-      setItem(initialState);
-    }
-  }, []);
+  const showItemStructure = (value, subjectName) => {
+    let cloneItem = { ...item };
+    cloneItem.question = value.question;
+    cloneItem.opt1 = value.options[0];
+    cloneItem.opt2 = value.options[1];
+    cloneItem.opt3 = value.options[2];
+    cloneItem.opt4 = value.options[3];
+    cloneItem.answer = value.answer;
+    subjectName && (cloneItem.subjectName = subjectName);
+    cloneItem.errors = initialError;
+    setItem(cloneItem);
+  };
 
   const itemStructure = () => {
     const optionAry = [];
@@ -118,10 +112,22 @@ function CreateExam() {
     return data;
   };
 
+  useEffect(() => {
+    storageItem && setCurrentQuestion(currentQuestion - 1);
+    if (storageItem) {
+      const tempStorage =
+        storageItem && storageItem.questions[currentQuestion - 1];
+      showItemStructure(tempStorage, storageItem.subjectName);
+    } else {
+      setItem(initialState);
+    }
+  }, []);
+
   const handleClick = (e) => {
     e.preventDefault();
     if (storageItem && storageItem.subjectName) {
       let tempRecord = { ...item };
+      item.subjectName = storageItem.subjectName;
       item.errors.subjectName = "";
       setItem(tempRecord);
     }
@@ -159,10 +165,10 @@ function CreateExam() {
         }
         localStorage.setItem("examPaper", JSON.stringify(tempData));
       } else {
-        let structureItem={}
+        let structureItem = {};
         structureItem.subjectName = item.subjectName;
-        structureItem.questions=[]
-        structureItem.questions.push(data)
+        structureItem.questions = [];
+        structureItem.questions.push(data);
         localStorage.setItem("examPaper", JSON.stringify(structureItem));
       }
       setItem(initialState);
@@ -171,20 +177,11 @@ function CreateExam() {
     }
   };
 
-  const showItemStructure=(value)=>{
-     let cloneItem = { ...item };
-          cloneItem.question = value.question;
-          cloneItem.opt1 = value.options[0];
-          cloneItem.opt2 = value.options[1];
-          cloneItem.opt3 = value.options[2];
-          cloneItem.opt4 = value.options[3];
-          cloneItem.answer = value.answer;
-          cloneItem.errors = initialError;
-          setItem(cloneItem);
-  }
-  
   const commonUpdate = () => {
+    console.log(item);
     const tempUpdate = Object.values(item.errors).some((val) => val === "");
+    console.log(`item.errors`, item.errors);
+    console.log(`item`, item);
     if (tempUpdate) {
       if (validateFormNext(item.errors)) {
         if (confirm("Are you sure you want to Update Question")) {
@@ -198,7 +195,7 @@ function CreateExam() {
           setItem(cloneItem);
         } else {
           const tempVar = storageItem.questions[currentQuestion];
-          showItemStructure(tempVar)
+          showItemStructure(tempVar);
         }
       }
     }
@@ -212,18 +209,23 @@ function CreateExam() {
   const handlePage = (page) => {
     setCurrentQuestion(page);
     let tempData = storageItem.questions[page];
-    showItemStructure(tempData)
+    showItemStructure(tempData);
   };
 
   const handlePrevious = (e) => {
     e.preventDefault();
-    commonUpdate();
-    let page = currentQuestion - 1;
-    handlePage(page);
+    const tempData = Object.values(item.errors).some((val) => val.length > 1);
+    if (!tempData) {
+      commonUpdate();
+      let page = currentQuestion - 1;
+      handlePage(page);
+    }
   };
 
   const handleNext = (e) => {
-    e.preventDefault();   
+    e.preventDefault();
+    const tempData = Object.values(item.errors).some((val) => val.length > 1);
+    if (!tempData) {
       commonUpdate();
       if (storageItem.questions.length - currentQuestion === 1) {
         setCurrentQuestion(currentQuestion + 1);
@@ -232,6 +234,7 @@ function CreateExam() {
         let page = currentQuestion + 1;
         handlePage(page);
       }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -314,3 +317,4 @@ export default CreateExam;
 
 //CurrentQuestion === 0 then only subjectName Error OtherWise Try to Delete also currentQuestion === 0 then we need to update this so keep in mind.
 //Handle next button when last question is blank.i have to add functionality if question value not blank then .. logic Implementation try ...
+//previous and next button error solve --->
