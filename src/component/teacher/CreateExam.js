@@ -14,6 +14,16 @@ import {
 import { reuseApi } from "../../reusable/ReuseApi";
 
 function CreateExam() {
+  const initialError = {
+    subjectName: " ",
+    question: " ",
+    opt1: " ",
+    opt2: " ",
+    opt3: " ",
+    opt4: " ",
+    answer: " ",
+  };
+
   const initialState = {
     question: "",
     opt1: "",
@@ -22,20 +32,12 @@ function CreateExam() {
     opt4: "",
     answer: "",
     subjectName: "",
-    errors: {
-      subjectName: " ",
-      question: " ",
-      opt1: " ",
-      opt2: " ",
-      opt3: " ",
-      opt4: " ",
-      answer: " ",
-    },
+    errors: initialError,
   };
 
   const storageItem = JSON.parse(localStorage.getItem("examPaper"));
-
   const [item, setItem] = useState(initialState);
+  const [note, setNote] = useState();
   const [currentQuestion, setCurrentQuestion] = useState(
     (storageItem && storageItem.questions.length) || 0
   );
@@ -67,8 +69,7 @@ function CreateExam() {
       default:
         break;
     }
-
-    if (index === 1) {
+    if (index === 1 ) {
       item.answer = item.opt1;
     } else if (index === 3) {
       item.answer = item.opt2;
@@ -107,16 +108,16 @@ function CreateExam() {
     }
   }, []);
 
-  const itemStructure=()=>{
-      const optionAry = [];
-      optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
-      const data = {};
-      data.question = item.question;
-      data.answer = item.answer;
-      data.options = optionAry;
-      return data  
-  }
-  
+  const itemStructure = () => {
+    const optionAry = [];
+    optionAry.push(item.opt1, item.opt2, item.opt3, item.opt4);
+    const data = {};
+    data.question = item.question;
+    data.answer = item.answer;
+    data.options = optionAry;
+    return data;
+  };
+
   const handleClick = (e) => {
     e.preventDefault();
     if (storageItem && storageItem.subjectName) {
@@ -134,8 +135,10 @@ function CreateExam() {
       }
     };
     const optionMsg = "Please Enter Option";
-    currentQuestion === 0 &&
-    validData(item.subjectName, "subjectName", "Please Choose Subject");
+    {
+      currentQuestion === 0 &&
+        validData(item.subjectName, "subjectName", "Please Choose Subject");
+    }
     validData(item.question, "question", "Please Enter Question");
     validData(item.opt1, "opt1", optionMsg);
     validData(item.opt2, "opt2", optionMsg);
@@ -144,23 +147,22 @@ function CreateExam() {
     validData(item.answer, "answer", "Please Select Correct Answer");
 
     if (validateForm(item.errors)) {
-      const data=itemStructure()
+      const data = itemStructure();
       if (storageItem) {
         let tempData = storageItem;
         tempData.questions.push(data);
         let dummy = [];
         dummy.push(note);
         {
-          currentQuestion==14 && (note ? (tempData.notes = dummy) : (tempData.notes = []));
+          currentQuestion == 14 &&
+            (note ? (tempData.notes = dummy) : (tempData.notes = [""]));
         }
         localStorage.setItem("examPaper", JSON.stringify(tempData));
       } else {
-        let structureItem = {
-          subjectName: "",
-          questions: [],
-        };
+        let structureItem={}
         structureItem.subjectName = item.subjectName;
-        structureItem.questions.push(data);
+        structureItem.questions=[]
+        structureItem.questions.push(data)
         localStorage.setItem("examPaper", JSON.stringify(structureItem));
       }
       setItem(initialState);
@@ -169,79 +171,86 @@ function CreateExam() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    handleClick(e);
-    if (validateForm(item.errors)) {
-      const data = storageItem;
-      const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
-        "access-token": localGet("token"),
-      });
-      console.log(response);
-      alert(response.data.message);
-      localStorage.removeItem("examPaper");
-      window.location.reload();
-    }
-  };
-
-  const handlePage = (page) => {
-    let tempData = storageItem.questions[page];
-    setCurrentQuestion(page);
-    let cloneItem = { ...item };
-    cloneItem.question = tempData.question;
-    cloneItem.answer = tempData.answer;
-    cloneItem.opt1 = tempData.options[0];
-    cloneItem.opt2 = tempData.options[1];
-    cloneItem.opt3 = tempData.options[2];
-    cloneItem.opt4 = tempData.options[3];
-    setItem(cloneItem);
-  };
-
-  const handlePrevious = (e) => {
-    e.preventDefault();
-    if (validateFormNext(item.errors)) {
-      let page = currentQuestion - 1;
-      handlePage(page);
-    }
-  };
-
-  const handleNext = (e) => {
-    e.preventDefault();
-    if (storageItem.questions.length - currentQuestion === 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setItem(initialState);
-    } else {
+  const showItemStructure=(value)=>{
+     let cloneItem = { ...item };
+          cloneItem.question = value.question;
+          cloneItem.opt1 = value.options[0];
+          cloneItem.opt2 = value.options[1];
+          cloneItem.opt3 = value.options[2];
+          cloneItem.opt4 = value.options[3];
+          cloneItem.answer = value.answer;
+          cloneItem.errors = initialError;
+          setItem(cloneItem);
+  }
+  
+  const commonUpdate = () => {
+    const tempUpdate = Object.values(item.errors).some((val) => val === "");
+    if (tempUpdate) {
       if (validateFormNext(item.errors)) {
-        let page = currentQuestion + 1;
-        handlePage(page);
+        if (confirm("Are you sure you want to Update Question")) {
+          const data = itemStructure();
+          const tempData = storageItem;
+          currentQuestion === 0 && (tempData.subjectName = item.subjectName);
+          tempData.questions[currentQuestion] = data;
+          localStorage.setItem("examPaper", JSON.stringify(tempData));
+          let cloneItem = { ...item };
+          cloneItem.errors = initialError;
+          setItem(cloneItem);
+        } else {
+          const tempVar = storageItem.questions[currentQuestion];
+          showItemStructure(tempVar)
+        }
       }
     }
   };
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    if (validateFormNext(item.errors)) {
-      if (confirm("Are you sure you want to Update Question")) {
-        const data=itemStructure()
-        const tempData = storageItem;
-        currentQuestion === 0 && (tempData.subjectName = item.subjectName);
-        tempData.questions[currentQuestion] = data;
-        localStorage.setItem("examPaper", JSON.stringify(tempData));
+    commonUpdate();
+  };
+
+  const handlePage = (page) => {
+    setCurrentQuestion(page);
+    let tempData = storageItem.questions[page];
+    showItemStructure(tempData)
+  };
+
+  const handlePrevious = (e) => {
+    e.preventDefault();
+    commonUpdate();
+    let page = currentQuestion - 1;
+    handlePage(page);
+  };
+
+  const handleNext = (e) => {
+    e.preventDefault();   
+      commonUpdate();
+      if (storageItem.questions.length - currentQuestion === 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setItem(initialState);
       } else {
-        let cloneItem = { ...item };
-        const tempVar = storageItem.questions[currentQuestion];
-        cloneItem.question = storageItem.questions[currentQuestion].question;
-        cloneItem.opt1 = tempVar.options[0];
-        cloneItem.opt2 = tempVar.options[1];
-        cloneItem.opt3 = tempVar.options[2];
-        cloneItem.opt4 = tempVar.options[3];
-        cloneItem.answer = tempVar.answer;
-        setItem(cloneItem);
+        let page = currentQuestion + 1;
+        handlePage(page);
+      }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    currentQuestion === 14 && handleClick(e);
+    if (validateForm(item.errors)) {
+      const data = storageItem;
+      const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
+        "access-token": localGet("token"),
+      });
+      alert(response.data.message);
+      // window.location.reload();
+      if (response.data.statusCode === 200) {
+        setCurrentQuestion(0);
+        localStorage.removeItem("examPaper");
       }
     }
   };
- 
-  const [note, setNote] = useState();
+
   const handleNotes = (e) => {
     setNote(e.target.value);
   };
@@ -258,7 +267,7 @@ function CreateExam() {
           disable={currentQuestion !== 0 ? true : false}
           errors={item.errors.subjectName}
         ></OptionField>
-       <p>{currentQuestion + 1}/15</p> 
+        <p>{currentQuestion >= 15 ? 15 : currentQuestion + 1}/15</p>
         <InputFields
           fields={questionAry}
           data={item}
@@ -274,8 +283,8 @@ function CreateExam() {
               rows="3"
               cols="35"
               onChange={handleNotes}
-            /> 
-            <br />  
+            />
+            <br />
             <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
           </>
         ) : storageItem && storageItem.questions.length !== currentQuestion ? (
@@ -284,9 +293,11 @@ function CreateExam() {
           <ButtonField value="Add" onClick={handleClick} />
         )}
         &nbsp;&nbsp;
-        {storageItem && storageItem.questions.length > currentQuestion && currentQuestion!==14 ? (
+        {storageItem &&
+        storageItem.questions.length > currentQuestion &&
+        currentQuestion !== 14 ? (
           <ButtonField value="Next" onClick={handleNext} />
-        ) : ( 
+        ) : (
           <ButtonField value="Next" disable={true} cursorPoint={true} />
         )}
         &nbsp;&nbsp;
@@ -300,4 +311,6 @@ function CreateExam() {
   );
 }
 export default CreateExam;
- 
+
+//CurrentQuestion === 0 then only subjectName Error OtherWise Try to Delete also currentQuestion === 0 then we need to update this so keep in mind.
+//Handle next button when last question is blank.i have to add functionality if question value not blank then .. logic Implementation try ...
