@@ -37,7 +37,7 @@ function CreateExam() {
 
   const storageItem = JSON.parse(localStorage.getItem("examPaper"));
   const [item, setItem] = useState(initialState);
-  const [note, setNote] = useState();
+  const [note, setNote] = useState({ note: [""],errors:' '});
   const [currentQuestion, setCurrentQuestion] = useState(
     (storageItem && storageItem.questions.length) || 0
   );
@@ -69,6 +69,7 @@ function CreateExam() {
       default:
         break;
     }
+
     if (index === 1) {
       item.answer = item.opt1;
     } else if (index === 3) {
@@ -78,6 +79,11 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
+    // else{
+    //   item.answer=""
+    //   item.errors.answer="   "
+    // }
+
     if (item.answer !== "") {
       item.errors.answer = "";
     }
@@ -125,7 +131,6 @@ function CreateExam() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(item)
     if (storageItem && storageItem.subjectName) {
       let tempRecord = { ...item };
       item.subjectName = storageItem.subjectName;
@@ -179,10 +184,7 @@ function CreateExam() {
   };
 
   const commonUpdate = () => {
-    // console.log(item);
     const tempUpdate = Object.values(item.errors).some((val) => val === "");
-    // console.log(`item.errors`, item.errors);
-    // console.log(`item`, item);
     if (tempUpdate) {
       if (validateFormNext(item.errors)) {
         if (confirm("Are you sure you want to Update Question")) {
@@ -255,10 +257,37 @@ function CreateExam() {
     }
   };
 
-  const handleNotes = (e) => {
-    setNote(e.target.value);
+  const handleNotes = (e, index) => {
+    const cloneNote = { ...note };
+    if(e.target.value.length > 0){
+      cloneNote.errors=""
+    } 
+    cloneNote.note[index] = e.target.value;
+    setNote(cloneNote);
+    console.log(`note`, note)
   };
 
+  const handleAdd = (e) => {
+    e.preventDefault();
+    const cloneNote = { ...note };
+      if(note.errors===""){
+        cloneNote.note.push("");
+        cloneNote.errors=" "
+      }else{
+        cloneNote.errors="Please Fill First"
+      }
+      setNote(cloneNote);
+  };
+
+  const handleDelete = (e,index) => {
+    e.preventDefault();
+    const cloneNote = { ...note };
+    {cloneNote.note.length > 0 && cloneNote.note.splice(index, 1);}
+    cloneNote.errors=" "
+    setNote(cloneNote);
+  };
+
+  console.log(note);
   return (
     <div>
       <h1>Create Exam Module</h1>
@@ -281,13 +310,29 @@ function CreateExam() {
         ></InputFields>
         {currentQuestion === 14 ? (
           <>
-            <textarea
-              placeholder="Enter Notes"
-              name="notes"
-              rows="3"
-              cols="35"
-              onChange={handleNotes}
-            />
+            {note.note.map((val, index) => {
+              return (
+                <React.Fragment key={index}>
+                  <input
+                    name="notes"
+                    onChange={(e) => handleNotes(e, index)}
+                    placeholder="Enter Exam Notes"
+                    value={val}
+                  ></input> 
+                  &nbsp;
+                  <ButtonField value="+" onClick={handleAdd} />
+                  &nbsp;
+                  {note.note.length > 1 && (
+                    <ButtonField
+                      value="-"
+                      onClick={(e) => handleDelete(e, index)}
+                    />
+                  )}
+                  <br />
+                </React.Fragment>
+              );
+            })}
+            <div className="errorMsg mb-3">{note.errors}</div>
             <br />
             <ButtonField type="submit" value="Submit" onClick={handleSubmit} />
           </>
@@ -315,7 +360,3 @@ function CreateExam() {
   );
 }
 export default CreateExam;
-
-//CurrentQuestion === 0 then only subjectName Error OtherWise Try to Delete also currentQuestion === 0 then we need to update this so keep in mind.
-//Handle next button when last question is blank.i have to add functionality if question value not blank then .. logic Implementation try ...
-//previous and next button error solve --->
