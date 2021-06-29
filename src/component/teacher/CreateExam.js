@@ -125,6 +125,7 @@ function CreateExam() {
 
   const handleClick = (e) => {
     e.preventDefault();
+    console.log(item)
     if (storageItem && storageItem.subjectName) {
       let tempRecord = { ...item };
       item.subjectName = storageItem.subjectName;
@@ -178,10 +179,10 @@ function CreateExam() {
   };
 
   const commonUpdate = () => {
-    console.log(item);
+    // console.log(item);
     const tempUpdate = Object.values(item.errors).some((val) => val === "");
-    console.log(`item.errors`, item.errors);
-    console.log(`item`, item);
+    // console.log(`item.errors`, item.errors);
+    // console.log(`item`, item);
     if (tempUpdate) {
       if (validateFormNext(item.errors)) {
         if (confirm("Are you sure you want to Update Question")) {
