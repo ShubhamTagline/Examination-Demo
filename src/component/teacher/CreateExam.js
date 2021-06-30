@@ -238,24 +238,23 @@ function CreateExam() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     delete item.errors.subjectName
-    console.log(`item`, item)
-    console.log(`note.errors`, note)
-    if (validateForm(item.errors)) {
-      console.log(`currentQuestion`, currentQuestion)
-      const data = storageItem;
-      currentQuestion === 14 && handleClick(e); //handle exam if exam not create then handleclick manage ....
-      // const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
-      //   "access-token": localGet("token"),
-      // });
-      // alert(response.data.message);
-      // // window.location.reload();
-      // if (response.data.statusCode === 200) {
-      //   setCurrentQuestion(0);
-      //   localStorage.removeItem("examPaper");
-      // }
+      if (validateFormNext(item.errors)) {
+      const data = storageItem; 
+      storageItem.questions.length === 14 && handleClick(e);  
+        if(validateFormNext(item.errors)){
+          const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
+            "access-token": localGet("token"),
+          });
+          alert(response && response.data.message);
+           if (response &&response.data.statusCode === 200) {
+             window.location.reload();
+             setCurrentQuestion(0);
+             localStorage.removeItem("examPaper");
+           }
+        }
     }
   };
-
+ 
   const handleNotes = (e, index) => {
     const cloneNote = { ...note };
     if(e.target.value.length > 0){
@@ -285,7 +284,6 @@ function CreateExam() {
     setNote(cloneNote);
   };
 
-  // console.log(note)
   return (
     <div>
       <h1>Create Exam Module</h1>

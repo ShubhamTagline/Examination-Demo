@@ -13,6 +13,7 @@ import GetStudent from "./component/teacher/GetStudent";
 import ShowStudent from "./component/teacher/ShowStudent";
 import TeacherAdmin from "./component/teacher/TeacherAdmin";
 import VerifyStudent from "./component/teacher/VerifyStudent";
+import ViewExam from "./component/teacher/ViewExam";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/getStudent" component={GetStudent}></Route>
           <Route path="/studentProfile" component={StudentProfile}></Route>
           <Route path="/createExam" component={CreateExam}></Route>
+          <Route path="/viewExam" component={ViewExam}></Route>
         </Switch>
       </Router>
     </div>

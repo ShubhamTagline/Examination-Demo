@@ -3,35 +3,30 @@ import { Table } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { ButtonField } from "./OtherReuse";
 
-function TableData({ headingCol, tableData }) {
-  
-  let history=useHistory()
+function TableData({ headingCol, tableData, buttonAction }) {
+  let history = useHistory();
   const dataTable =
     tableData &&
     tableData.map((row, index) => {
       let rowData = [];
       let i = 0;
-      for (const key in row) {  
+      for (i = 0; i < headingCol.length; i++) {
         rowData.push({
           key: headingCol[i],
-          val: row[key],
+          val: row[headingCol[i]],
         });
-        i++;
       }
-
       let studentId = 0;
-
       return (
         <tr key={index}>
           {rowData.map((data, index) => (
-              <td key={index}>
-                {data.val}
-                {headingCol.includes("Action") && data.key === "_id"
-                  ? (studentId = data.val)
-                  : null}
-              </td>
+            <td key={index}>
+              {buttonAction && data.key === "_id"
+                ? (studentId = data.val)
+                : data.val}
+            </td>
           ))}
-          {headingCol.includes("Action") && (
+          {buttonAction && (
             <td>
               <ButtonField
                 variant="success"
@@ -43,7 +38,6 @@ function TableData({ headingCol, tableData }) {
         </tr>
       );
     });
-
   return (
     <div>
       <Table striped bordered hover size="sm">

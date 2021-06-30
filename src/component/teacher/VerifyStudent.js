@@ -18,7 +18,7 @@ function VerifyStudent() {
       if(data.status===200){
         alert(data.data.message)
         if(data.data.statusCode===200){
-          const heading=["Status","_id","name","email"]
+          const heading=["name","email","status"]
           setHeading(heading)
           setItem(data.data.data)
         }

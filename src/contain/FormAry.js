@@ -107,11 +107,11 @@ export const profileAry = {
 
 export const subjectAry = {
   data: [
-    { item: "Software engineering" },
-    { item: "Computer-Graphics" },
+    { item: "communication Skills" },
+    { item: "Computer Information" },
     { item: "Account" },
-    { item: "Software engineering II" },
-    { item: "Graphics" },
+    { item: "Managements" },
+    { item: "Graphic" },
   ],
 };
 

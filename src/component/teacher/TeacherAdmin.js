@@ -8,6 +8,9 @@ function TeacherAdmin() {
       <Link to="/createExam" className="m-3">
         Create Exam
       </Link>
+      <Link to="/viewExam" className="m-3">
+        View Exam
+      </Link>
       <Link to="/showStudent" className="m-3">
         Show Student
       </Link>

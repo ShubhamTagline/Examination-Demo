@@ -14,10 +14,11 @@ function ShowStudent() {
       const data = await reuseApi("get", "dashboard/Teachers", null, {
         "access-token": localGet("token"),
       });
+      console.log(`data`, data)
       if (data.status === 200) {
         alert(data.data.message);
         if (data.data.statusCode === 200) {
-          const header = ["status", "_id", "Name","email_id","Action"];
+          const header = ["_id","name","email","status"];
           setHeading(header)
           setItem(data.data.data)
         }
@@ -33,6 +34,7 @@ function ShowStudent() {
         <TableData
           headingCol={heading}
           tableData={item}
+          buttonAction={true}
         ></TableData>
       )}
     </div>
