@@ -162,13 +162,8 @@ function CreateExam() {
       const data = itemStructure();
       if (storageItem) {
         let tempData = storageItem;
-        tempData.questions.push(data);
-        let dummy = [];
-        dummy.push(note);
-        {
-          currentQuestion == 14 &&
-            (note ? (tempData.notes = dummy) : (tempData.notes = [""]));
-        }
+        tempData.questions.push(data); 
+        {currentQuestion===14 && (tempData.notes=note.note)}  
         localStorage.setItem("examPaper", JSON.stringify(tempData));
       } else {
         let structureItem = {};
@@ -177,7 +172,7 @@ function CreateExam() {
         structureItem.questions.push(data);
         localStorage.setItem("examPaper", JSON.stringify(structureItem));
       }
-      setItem(initialState);
+     { currentQuestion !== 14 &&  setItem(initialState)}
       const storageResult = JSON.parse(localStorage.getItem("examPaper"));
       setCurrentQuestion(storageResult.questions.length);
     }
@@ -242,18 +237,22 @@ function CreateExam() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    currentQuestion === 14 && handleClick(e);
+    delete item.errors.subjectName
+    console.log(`item`, item)
+    console.log(`note.errors`, note)
     if (validateForm(item.errors)) {
+      console.log(`currentQuestion`, currentQuestion)
       const data = storageItem;
-      const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
-        "access-token": localGet("token"),
-      });
-      alert(response.data.message);
-      // window.location.reload();
-      if (response.data.statusCode === 200) {
-        setCurrentQuestion(0);
-        localStorage.removeItem("examPaper");
-      }
+      currentQuestion === 14 && handleClick(e); //handle exam if exam not create then handleclick manage ....
+      // const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
+      //   "access-token": localGet("token"),
+      // });
+      // alert(response.data.message);
+      // // window.location.reload();
+      // if (response.data.statusCode === 200) {
+      //   setCurrentQuestion(0);
+      //   localStorage.removeItem("examPaper");
+      // }
     }
   };
 
@@ -264,7 +263,6 @@ function CreateExam() {
     } 
     cloneNote.note[index] = e.target.value;
     setNote(cloneNote);
-    console.log(`note`, note)
   };
 
   const handleAdd = (e) => {
@@ -287,7 +285,7 @@ function CreateExam() {
     setNote(cloneNote);
   };
 
-  console.log(note);
+  // console.log(note)
   return (
     <div>
       <h1>Create Exam Module</h1>
