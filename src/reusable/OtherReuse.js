@@ -67,3 +67,12 @@ export const localGet = (val) => {
    return localStorage.getItem(val);
  };
   
+export const showLoader=()=>{
+  return (
+    <img
+      src="https://media.tenor.com/images/a742721ea2075bc3956a2ff62c9bfeef/tenor.gif"
+      alt="Not Found"
+      style={{ height: "100px", width: "100px" }}
+    />
+  );
+}

@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { localGet } from "../../reusable/OtherReuse";
+import { localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import TableData from "../../reusable/TableData";
 
 function VerifyStudent() {
-    const [item, setItem] = useState();
-    const [heading, setHeading] = useState();
+  const [item, setItem] = useState();
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     const userData = async () => {
-      const data = await reuseApi(
+      const response = await reuseApi(
         "get",
         "dashboard/Teachers/StudentForExam",
         null,
         { "access-token": localGet("token") }
       );
-      if(data.status===200){
-        alert(data.data.message)
-        if(data.data.statusCode===200){
-          const heading=["name","email","status"]
-          setHeading(heading)
-          setItem(data.data.data)
+      if (response.status === 200) {
+        setLoader(false);
+        if (response.data.statusCode === 200) {
+          setItem(response.data.data);
         }
       }
     };
@@ -30,7 +28,13 @@ function VerifyStudent() {
   return (
     <div className="container">
       <h1>Verify Student </h1>
-      <TableData headingCol={heading} tableData={item}></TableData>
+      {loader && showLoader()}
+      {item && (
+        <TableData
+          headingCol={["email", "name", "status"]}
+          tableData={item}
+        ></TableData>
+      )}
     </div>
   );
 }

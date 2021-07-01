@@ -79,11 +79,7 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
-    // else{
-    //   item.answer=""
-    //   item.errors.answer="   "
-    // }
-
+   
     if (item.answer !== "") {
       item.errors.answer = "";
     }

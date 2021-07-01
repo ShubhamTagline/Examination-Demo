@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { localGet } from "../../reusable/OtherReuse";
+import { localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import TableData from "../../reusable/TableData";
 
@@ -9,6 +9,7 @@ function GetStudent() {
   const search = useLocation().search;
   const [item, setItem] = useState();
   const [result, setResult] = useState();
+  const [loader,setLoader]=useState(true)
 
   useEffect(() => {
     const userData = async () => {
@@ -19,38 +20,27 @@ function GetStudent() {
         null,
         { "access-token": localGet("token") }
       );
-         console.log(data)
       if (data.status === 200) {
-        alert(data.data.message);
-        if (data.data.statusCode === 200) {
-          data.data.data[0].Result.map((val) => {
-            delete val.__v;
-            delete val.studentId;
-            delete val._id;
-            delete val.studentAnswer
-          });
-
-          setResult(data.data.data[0].Result);
-          {data.data.data[0].Result && delete data.data.data[0].Result}
+        setLoader(false)
+         if (data.data.statusCode === 200) {
           setItem(data.data.data);
+          setResult(data.data.data[0].Result);
         }
       }
     };
     userData();
   }, []);
-
+ 
   return (
     <div className="container">
       <h1>get student</h1>
+      {loader && showLoader()}
       {item && (
-        <TableData
-          headingCol={["id", "name", "Email"]}
-          tableData={item}
-        ></TableData>
+        <TableData headingCol={["name", "email"]} tableData={item}></TableData>
       )}
-      {item && (
+      {(result && result.length>0) && (
         <TableData
-          headingCol={["Subject Name", "Result Status", "Score", "Rank"]}
+          headingCol={["subjectName", "score", "rank", "resultStatus"]}
           tableData={result}
         ></TableData>
       )}

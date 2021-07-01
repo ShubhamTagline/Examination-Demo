@@ -9,11 +9,13 @@ import SignUp from "./component/SignUp";
 import StudentAdmin from "./component/student/StudentAdmin";
 import StudentProfile from "./component/student/StudentProfile";
 import CreateExam from "./component/teacher/CreateExam";
+import EditExam from "./component/teacher/EditExam";
 import GetStudent from "./component/teacher/GetStudent";
 import ShowStudent from "./component/teacher/ShowStudent";
 import TeacherAdmin from "./component/teacher/TeacherAdmin";
 import VerifyStudent from "./component/teacher/VerifyStudent";
 import ViewExam from "./component/teacher/ViewExam";
+import ViewExamDetail from "./component/teacher/ViewExamDetail";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           <Route path="/studentProfile" component={StudentProfile}></Route>
           <Route path="/createExam" component={CreateExam}></Route>
           <Route path="/viewExam" component={ViewExam}></Route>
+          <Route path="/viewExamDetail" component={ViewExamDetail}></Route>
+          <Route path="/editExam" component={EditExam}></Route>
         </Switch>
       </Router>
     </div>

@@ -48,14 +48,4 @@ InputFields.propTypes = {
 };
 
 export default InputFields;
-
-//radio button explanation
-// http://react.tips/radio-buttons-in-reactjs/
-//https://stackoverflow.com/questions/48014390/how-to-handle-multiple-radio-button-groups-in-one-component-in-reactjs
-
-
-//bugs I need to solve
-// 1]first question update time subjectName blank error 
-// 2]Radio button Update ans need to blank
-// 3]previous button when last question not properly work 
-// 4]Add notes functionality. (working on It from 3:15 PM) almost done for 6:30 (only Validation Manage some Issue)
+ 
