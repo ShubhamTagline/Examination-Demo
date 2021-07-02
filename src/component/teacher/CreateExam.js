@@ -242,6 +242,7 @@ function CreateExam() {
       const data = storageItem;
       storageItem.questions.length === 14 && handleClick(e);
       if (validateFormNext(item.errors)) {
+        console.log(`data`, data);
         const response = await reuseApi(
           "post",
           "dashboard/Teachers/Exam",
@@ -249,10 +250,10 @@ function CreateExam() {
           {
             "access-token": localGet("token"),
           }
-        );
-        alert(response && response.data.message);
-        if (response && response.data.statusCode === 200) {
+          );
           window.location.reload();
+        alert(response.data.message);
+        if (response.data.statusCode === 200) {
           setCurrentQuestion(0);
           localStorage.removeItem("examPaper");
         }
