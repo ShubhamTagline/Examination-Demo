@@ -171,3 +171,48 @@ export const questionAry = {
     },
   ],
 };
+
+export const examPaper = {
+  data: [
+    {
+      type: "text",
+      name: "question"
+    },
+    {
+      type: "radio",
+      name: "option",
+      label: "A",
+    },
+    {
+      type: "text",
+      name: "opt1"
+    },
+    {
+      type: "radio",
+      name: "option",
+      label: "B",
+    },
+    {
+      type: "text",
+      name: "opt2",
+    },
+    {
+      type: "radio",
+      name: "option",
+      label: "C",
+    },
+    {
+      type: "text",
+      name: "opt3",
+    },
+    {
+      type: "radio",
+      name: "option",
+      label: "D",
+    },
+    {
+      type: "text",
+      name: "opt4",
+    } 
+  ],
+};

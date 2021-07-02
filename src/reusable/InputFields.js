@@ -3,7 +3,7 @@ import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
 function InputFields({ fields, data, errors, onChange,submitDisable}) {
-  
+ 
   return ( 
     <>
       {fields.data.map((val, index) => {

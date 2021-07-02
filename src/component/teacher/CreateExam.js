@@ -37,7 +37,7 @@ function CreateExam() {
 
   const storageItem = JSON.parse(localStorage.getItem("examPaper"));
   const [item, setItem] = useState(initialState);
-  const [note, setNote] = useState({ note: [""],errors:' '});
+  const [note, setNote] = useState({ note: [""], errors: " " });
   const [currentQuestion, setCurrentQuestion] = useState(
     (storageItem && storageItem.questions.length) || 0
   );
@@ -79,7 +79,7 @@ function CreateExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
-   
+
     if (item.answer !== "") {
       item.errors.answer = "";
     }
@@ -158,8 +158,10 @@ function CreateExam() {
       const data = itemStructure();
       if (storageItem) {
         let tempData = storageItem;
-        tempData.questions.push(data); 
-        {currentQuestion===14 && (tempData.notes=note.note)}  
+        tempData.questions.push(data);
+        {
+          currentQuestion === 14 && (tempData.notes = note.note);
+        }
         localStorage.setItem("examPaper", JSON.stringify(tempData));
       } else {
         let structureItem = {};
@@ -168,7 +170,9 @@ function CreateExam() {
         structureItem.questions.push(data);
         localStorage.setItem("examPaper", JSON.stringify(structureItem));
       }
-     { currentQuestion !== 14 &&  setItem(initialState)}
+      {
+        currentQuestion !== 14 && setItem(initialState);
+      }
       const storageResult = JSON.parse(localStorage.getItem("examPaper"));
       setCurrentQuestion(storageResult.questions.length);
     }
@@ -233,29 +237,34 @@ function CreateExam() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    delete item.errors.subjectName
+    delete item.errors.subjectName;
+    if (validateFormNext(item.errors)) {
+      const data = storageItem;
+      storageItem.questions.length === 14 && handleClick(e);
       if (validateFormNext(item.errors)) {
-      const data = storageItem; 
-      storageItem.questions.length === 14 && handleClick(e);  
-        if(validateFormNext(item.errors)){
-          const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
+        const response = await reuseApi(
+          "post",
+          "dashboard/Teachers/Exam",
+          data,
+          {
             "access-token": localGet("token"),
-          });
-          alert(response && response.data.message);
-           if (response &&response.data.statusCode === 200) {
-             window.location.reload();
-             setCurrentQuestion(0);
-             localStorage.removeItem("examPaper");
-           }
+          }
+        );
+        alert(response && response.data.message);
+        if (response && response.data.statusCode === 200) {
+          window.location.reload();
+          setCurrentQuestion(0);
+          localStorage.removeItem("examPaper");
         }
+      }
     }
   };
- 
+
   const handleNotes = (e, index) => {
     const cloneNote = { ...note };
-    if(e.target.value.length > 0){
-      cloneNote.errors=""
-    } 
+    if (e.target.value.length > 0) {
+      cloneNote.errors = "";
+    }
     cloneNote.note[index] = e.target.value;
     setNote(cloneNote);
   };
@@ -263,20 +272,22 @@ function CreateExam() {
   const handleAdd = (e) => {
     e.preventDefault();
     const cloneNote = { ...note };
-      if(note.errors===""){
-        cloneNote.note.push("");
-        cloneNote.errors=" "
-      }else{
-        cloneNote.errors="Please Fill First"
-      }
-      setNote(cloneNote);
+    if (note.errors === "") {
+      cloneNote.note.push(" ");
+      cloneNote.errors = " ";
+    } else {
+      cloneNote.errors = "Please Fill First";
+    }
+    setNote(cloneNote);
   };
 
-  const handleDelete = (e,index) => {
+  const handleDelete = (e, index) => {
     e.preventDefault();
     const cloneNote = { ...note };
-    {cloneNote.note.length > 0 && cloneNote.note.splice(index, 1);}
-    cloneNote.errors=" "
+    {
+      cloneNote.note.length > 0 && cloneNote.note.splice(index, 1);
+    }
+    cloneNote.errors = " ";
     setNote(cloneNote);
   };
 
@@ -310,7 +321,7 @@ function CreateExam() {
                     onChange={(e) => handleNotes(e, index)}
                     placeholder="Enter Exam Notes"
                     value={val}
-                  ></input> 
+                  ></input>
                   &nbsp;
                   <ButtonField value="+" onClick={handleAdd} />
                   &nbsp;

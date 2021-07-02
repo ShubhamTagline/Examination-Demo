@@ -30,6 +30,7 @@ function TableData({ headingCol, tableData, buttonAction, viewExam }) {
           val: row[headingCol[i]],
         });
       }
+  
       let studentId = 0;
       return (
         <tr key={index}>
@@ -38,7 +39,7 @@ function TableData({ headingCol, tableData, buttonAction, viewExam }) {
               {data.key === "_id"
                 ? (studentId = data.val)
                 : Array.isArray(data.val)
-                ? data.val.map((aryVal,index) => (
+                ? data.val.map((aryVal, index) => (
                     <React.Fragment key={index}>
                       {aryVal}
                       <br />

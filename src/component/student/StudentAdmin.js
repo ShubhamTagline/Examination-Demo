@@ -5,6 +5,9 @@ function StudentAdmin() {
   return (
     <div className="App">
       <h1>Student Admin Module</h1>
+      <Link to="/showExam" className="m-3">
+        View Exam
+      </Link>
       <Link to="/studentProfile" className="m-3">
         Student Profile
       </Link>

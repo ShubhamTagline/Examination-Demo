@@ -6,6 +6,8 @@ import NewPassword from "./component/NewPassword";
 import ResetPass from "./component/ResetPass";
 import SignIn from "./component/SignIn";
 import SignUp from "./component/SignUp";
+import GiveExam from "./component/student/GiveExam";
+import ShowExam from "./component/student/ShowExam";
 import StudentAdmin from "./component/student/StudentAdmin";
 import StudentProfile from "./component/student/StudentProfile";
 import CreateExam from "./component/teacher/CreateExam";
@@ -40,6 +42,8 @@ function App() {
           <Route path="/viewExam" component={ViewExam}></Route>
           <Route path="/viewExamDetail" component={ViewExamDetail}></Route>
           <Route path="/editExam" component={EditExam}></Route>
+          <Route path="/showExam" component={ShowExam}></Route>
+          <Route path="/giveExam" component={GiveExam}></Route>
         </Switch>
       </Router>
     </div>
