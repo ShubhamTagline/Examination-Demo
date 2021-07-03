@@ -1,6 +1,7 @@
 import React from 'react'
 
-function InputData({fields,data}) {
+function InputData({fields,data,onChange}) {
+   
   return (
     <div>
       {fields.data.map((val,index)=>{
@@ -12,13 +13,13 @@ function InputData({fields,data}) {
               name={val.name}
               placeholder={val.placeholder}
               className="mb-3"
-              value={data[val.name] || ""}
+              value={(data && data[val.name]) || '' }
               readOnly
-              // checked={
-              //   data.answer &&
-              //   data[fields?.data[index + 1]?.name] === data.answer
-              // }
-              // onChange={(e) => onChange(e, index, val)}
+              checked={
+                data.answer &&
+                data[fields?.data[index + 1]?.name] === data.answer
+              }
+              onChange={(e) => onChange(e, index, val)}
             />
             {/* <div className="errorMsg mb-3">{errors && errors[val.name]}</div> */}
           </div>

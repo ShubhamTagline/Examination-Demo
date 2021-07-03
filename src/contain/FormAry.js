@@ -176,7 +176,8 @@ export const examPaper = {
   data: [
     {
       type: "text",
-      name: "question"
+      name: "question",
+      label:"Question:"
     },
     {
       type: "radio",
