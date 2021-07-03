@@ -2,28 +2,24 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { profileAry } from "../../contain/FormAry";
 import InputFields from "../../reusable/InputFields";
-import { localGet } from "../../reusable/OtherReuse";
+import { localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 
 function StudentProfile() {
-  const initialState = {
-    name: "",
-    emailProfile: "",
-  };
-
-  const [item, setItem] = useState(initialState);
+  const [item, setItem] = useState();
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     const studentData = async () => {
-      const data = await reuseApi("get", "student/getStudentDetail", null, {
+      const response = await reuseApi("get", "student/getStudentDetail", null, {
         "access-token": localGet("token"),
       });
-      if (data.status === 200) {
-        alert(data.data.message);
-        if (data.data.statusCode === 200) {
+      if (response.status === 200) {
+        setLoader(false);
+        if (response.data.statusCode === 200) {
           setItem({
-            name: data.data.data.name,
-            emailProfile: data.data.data.email,
+            name: response.data.data.name,
+            emailProfile: response.data.data.email,
           });
         }
       }
@@ -44,25 +40,26 @@ function StudentProfile() {
     if (item.name === "") {
       alert("Please Enter Your Name");
     } else {
-      const data = await reuseApi("put", "student/studentProfile", item, {
+      const response = await reuseApi("put", "student/studentProfile", item, {
         "access-token": localGet("token"),
       });
-      if (data.status === 200) {
-        alert(data.data.message);
-      }
+      alert(response.data.message);
     }
   };
 
   return (
     <div>
       <h1>Student Profile</h1>
-      <form onSubmit={handleSubmit}>
-        <InputFields
-          fields={profileAry}
-          data={item}
-          onChange={handleChange}
-        ></InputFields>
-      </form>
+      {loader && showLoader()}
+      {item && (
+        <form onSubmit={handleSubmit}>
+          <InputFields
+            fields={profileAry}
+            data={item}
+            onChange={handleChange}
+          />
+        </form>
+      )}
     </div>
   );
 }
