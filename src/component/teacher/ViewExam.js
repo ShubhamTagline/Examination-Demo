@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { localGet, showLoader } from "../../reusable/OtherReuse";
+import Loader from "../../reusable/Loader";
+import { localGet  } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import TableData from "../../reusable/TableData";
 import Title from "../../reusable/Title";
@@ -24,7 +25,7 @@ function ViewExam() {
   return (
     <>
       <Title title="View Exam Details"></Title>
-      {loader && showLoader()}
+      {loader && <Loader/>}
       {item && <TableData headingCol={["_id", "email", "subjectName","notes"]} tableData={item} buttonAction={false} viewExam={true} ></TableData>}
     </>
   );

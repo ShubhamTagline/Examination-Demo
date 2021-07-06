@@ -5,9 +5,10 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { examPaper } from "../../contain/FormAry";
 import InputData from "../../reusable/InputData";
-import { ButtonField, localGet, showLoader } from "../../reusable/OtherReuse";
+import { ButtonField, localGet, loader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import Title from "../../reusable/Title";
+import Loader from "../../reusable/Loader";
 
 function GiveExam() {
   const initialState = {
@@ -110,7 +111,7 @@ function GiveExam() {
   return (
     <>
       <Title title="Give Exam"/>
-      {loader && showLoader()}
+      {loader && <Loader />}
       {result && (
         <>
           <p>{currentQuestion + 1}/7</p>

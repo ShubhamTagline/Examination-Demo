@@ -71,7 +71,7 @@ export const localSet=(title,value)=>{
   return localStorage.setItem(title,value)
 }
 
-export const showLoader=()=>{
+export const loader=()=>{
   return (
     <img
       src="https://media.tenor.com/images/a742721ea2075bc3956a2ff62c9bfeef/tenor.gif"

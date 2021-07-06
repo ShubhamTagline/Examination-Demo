@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { localGet, showLoader } from "../../reusable/OtherReuse";
+import { localGet } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import TableData from "../../reusable/TableData";
 import Title from "../../reusable/Title";
+import Loader from "../../reusable/Loader";
 
 function VerifyStudent() {
   const [item, setItem] = useState();
@@ -27,7 +28,7 @@ function VerifyStudent() {
   return (
     <>
       <Title title="Verify Student "/>
-      {loader && showLoader()}
+      {loader && <Loader />}
       {item && (
         <TableData
           headingCol={["email", "name", "status"]}

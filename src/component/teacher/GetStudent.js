@@ -1,10 +1,11 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { localGet, showLoader } from "../../reusable/OtherReuse";
+import { localGet } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import TableData from "../../reusable/TableData";
 import Title from "../../reusable/Title";
+import Loader from "../../reusable/Loader";
 
 function GetStudent() {
   const search = useLocation().search;
@@ -33,7 +34,7 @@ function GetStudent() {
   return (
     <>
       <Title title="Get Student"/>
-      {loader && showLoader()}
+      {loader && <Loader />}
       {item && (
         <TableData headingCol={["name", "email"]} tableData={item}></TableData>
       )}

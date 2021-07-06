@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { profileAry } from "../../contain/FormAry";
 import InputFields from "../../reusable/InputFields";
-import { localGet, showLoader } from "../../reusable/OtherReuse";
+import { localGet} from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import Title from "../../reusable/Title";
+import Loader from "../../reusable/Loader";
 
 function StudentProfile() {
   const [item, setItem] = useState();
@@ -49,7 +50,7 @@ function StudentProfile() {
   return (
     <>
       <Title title="Student Profile"/>
-      {loader && showLoader()}
+      {loader && <Loader/>}
       {item && (
         <form onSubmit={handleSubmit}>
           <InputFields

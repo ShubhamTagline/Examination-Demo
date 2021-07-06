@@ -1,10 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { localGet, showLoader } from '../../reusable/OtherReuse'
+import { localGet } from '../../reusable/OtherReuse'
 import { reuseApi } from '../../reusable/ReuseApi'
 import TableData from '../../reusable/TableData'
 import Title from '../../reusable/Title'
+import Loader from '../../reusable/Loader'
  
 function ShowStudent() {
   const [item,setItem]=useState()
@@ -26,7 +27,7 @@ function ShowStudent() {
   return (
     <>
       <Title title="Show All Student"/>
-      {loader && showLoader()}
+      {loader && <Loader />}
       {item && (
         <TableData
           headingCol={["_id", "name", "email", "status"]}

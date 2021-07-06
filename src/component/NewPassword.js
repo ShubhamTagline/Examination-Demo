@@ -7,7 +7,6 @@ import { alertMsg, validateForm, validPassword } from '../reusable/OtherReuse'
 import { reuseApi } from '../reusable/ReuseApi'
 import Title from "../reusable/Title";
 
-
 function NewPassword() {
   const initialState={
     Password:'',

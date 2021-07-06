@@ -3,9 +3,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Table } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { ButtonField, localGet, showLoader } from "../../reusable/OtherReuse";
+import { ButtonField, localGet} from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import Title from "../../reusable/Title";
+import Loader from "../../reusable/Loader";
 
 function ShowExam() {
   let history = useHistory();
@@ -27,7 +28,7 @@ function ShowExam() {
   return (
     <>
       <Title title="Exam Detail"></Title>
-      {loader && showLoader()}
+      {loader && <Loader/>}
       {item && (
         <Table striped bordered hover size="sm" className="container">
           <thead>
