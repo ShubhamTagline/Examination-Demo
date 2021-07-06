@@ -10,6 +10,7 @@ import {
   localGet,
 } from "../reusable/OtherReuse";
 import { reuseApi } from "../reusable/ReuseApi";
+import Title from "../reusable/Title";
 
 function ResetPass() {
   const initialState = {
@@ -56,17 +57,15 @@ function ResetPass() {
     e.preventDefault();
     if (validateForm(item.errors)) {
       delete item.errors;
-      const data = await reuseApi("post", "users/ResetPassword", item, {
+      const response = await reuseApi("post", "users/ResetPassword", item, {
         "access-token": localGet("token"),
       });
-      if (data.status === 200) {
-        alert(data.data.message);
-        if (data.data.statusCode === 200) {
-          localGet("role") === "student"
-            ? history.push("/studentAdmin") 
-            : history.push("/teacherAdmin");
-          setItem(initialState);
-        }
+      alert(response.data.message);
+      if (response.data.statusCode === 200) {
+        setItem(initialState);
+        localGet("role") === "student"
+          ? history.push("/studentAdmin")
+          : history.push("/teacherAdmin");
       }
     } else {
       alertMsg();
@@ -74,15 +73,17 @@ function ResetPass() {
   };
 
   return (
-    <div>
-      <h1>Reset Password</h1> <br />
+    <>
+      <Title title="Reset Password" /> <br />
       <form onSubmit={handleSubmit}>
         <InputFields
           fields={resetPassAry}
           onChange={handleChange}
           errors={item.errors}
           data={item}
-        ></InputFields><br/><br/>
+        ></InputFields>
+        <br />
+        <br />
         <Link
           to={
             localGet("role") === "student" ? "/studentAdmin" : "/teacherAdmin"
@@ -91,7 +92,7 @@ function ResetPass() {
           Back to Home?
         </Link>
       </form>
-    </div>
+    </>
   );
 }
 

@@ -4,11 +4,13 @@ import { signInAry } from "../contain/FormAry";
 import InputFields from "../reusable/InputFields";
 import {
   alertMsg,
+  localSet,
   validateForm,
   validEmail,
   validPassword,
 } from "../reusable/OtherReuse";
 import { reuseApi } from "../reusable/ReuseApi";
+import Title from "../reusable/Title";
 
 function SignIn() {
   const initialState = {
@@ -28,10 +30,10 @@ function SignIn() {
 
     switch (name) {
       case "email":
-        errors && (errors.email = validEmail(value))
+        errors && (errors.email = validEmail(value));
         break;
       case "password":
-        errors && (errors.password = validPassword(value))
+        errors && (errors.password = validPassword(value));
         break;
       default:
         break;
@@ -44,24 +46,23 @@ function SignIn() {
     });
   };
 
-  let history=useHistory()
+  let history = useHistory();
 
   const handleClick = async (e) => {
     e.preventDefault();
     if (validateForm(item.errors)) {
       delete item.errors;
-      const data = await reuseApi("post", "users/Login", item);
-      if (data.status === 200) {
-        alert(data.data.message);
-        if (data.data.statusCode === 200) {
-          localStorage.setItem("token", data.data?.data?.token);
-          localStorage.setItem("role", data.data?.data?.role);
-          setItem(initialState);
-          if(data.data.data?.role==="student"){
-            history.push("/studentAdmin");
-          }else{
-            history.push("/teacherAdmin")
-          }
+      const response = await reuseApi("post", "users/Login", item);
+      const list = response.data?.data;
+      alert(response.data.message);
+      if (response.data.statusCode === 200) {
+        localSet("token", list.token);
+        localSet("role", list.role);
+        setItem(initialState);
+        if (list.role === "student") {
+          history.push("/studentAdmin");
+        } else {
+          history.push("/teacherAdmin");
         }
       }
     } else {
@@ -70,8 +71,8 @@ function SignIn() {
   };
 
   return (
-    <div>
-      <h1>SignIn Page</h1>
+    <>
+      <Title title="SignIn"></Title>
       <br />
       <form onSubmit={handleClick}>
         <InputFields
@@ -84,7 +85,7 @@ function SignIn() {
       <br />
       <Link to="/"> Don't have an Account ? Sign Up </Link> <br />
       <Link to="/forgot">Forgot Password?</Link>
-    </div>
+    </>
   );
 }
 

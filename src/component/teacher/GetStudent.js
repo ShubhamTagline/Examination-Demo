@@ -4,6 +4,7 @@ import { useLocation } from "react-router";
 import { localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import TableData from "../../reusable/TableData";
+import Title from "../../reusable/Title";
 
 function GetStudent() {
   const search = useLocation().search;
@@ -14,26 +15,24 @@ function GetStudent() {
   useEffect(() => {
     const userData = async () => {
       const id = new URLSearchParams(search).get("id");
-      const data = await reuseApi(
+      const response = await reuseApi(
         "get",
         `dashboard/Teachers/viewStudentDetail?id=${id}`,
         null,
         { "access-token": localGet("token") }
       );
-      if (data.status === 200) {
         setLoader(false)
-         if (data.data.statusCode === 200) {
-          setItem(data.data.data);
-          setResult(data.data.data[0].Result);
-        }
-      }
+         if (response.data.statusCode === 200) {
+           setItem(response.data.data);
+           setResult(response.data.data[0].Result);
+         }
     };
     userData();
   }, []);
  
   return (
-    <div className="container">
-      <h1>get student</h1>
+    <>
+      <Title title="Get Student"/>
       {loader && showLoader()}
       {item && (
         <TableData headingCol={["name", "email"]} tableData={item}></TableData>
@@ -44,7 +43,7 @@ function GetStudent() {
           tableData={result}
         ></TableData>
       )}
-    </div>
+    </>
   );
 }
 

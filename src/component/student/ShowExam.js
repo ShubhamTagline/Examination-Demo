@@ -5,6 +5,7 @@ import { Table } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { ButtonField, localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
+import Title from "../../reusable/Title";
 
 function ShowExam() {
   let history = useHistory();
@@ -15,8 +16,8 @@ function ShowExam() {
       const response = await reuseApi("get", "student/studentExam", null, {
         "access-token": localGet("token"),
       });
+      setLoader(false);
       if (response.data.statusCode === 200) {
-        setLoader(false);
         setItem(response.data.data);
       }
     };
@@ -24,12 +25,11 @@ function ShowExam() {
   }, []);
 
   return (
-    <div className="container">
-      <h1>Exam Details</h1>
+    <>
+      <Title title="Exam Detail"></Title>
       {loader && showLoader()}
-
       {item && (
-        <Table striped bordered hover size="sm">
+        <Table striped bordered hover size="sm" className="container">
           <thead>
             <tr>
               <th>#</th>
@@ -73,7 +73,7 @@ function ShowExam() {
           </tbody>
         </Table>
       )}
-    </div>
+    </>
   );
 }
 

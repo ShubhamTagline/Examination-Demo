@@ -4,6 +4,7 @@ import { useLocation } from "react-router";
 import { localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
 import TableData from "../../reusable/TableData";
+import Title from "../../reusable/Title";
 
 function ViewExamDetail() {
   const [item, setItem] = useState();
@@ -30,8 +31,8 @@ function ViewExamDetail() {
   }, []);
   
   return (
-    <div className="container">
-      <h1>View Exam Details</h1>
+    <>
+      <Title title="Exam Paper"/>
       {loader && showLoader()}
       {item && (
         <TableData
@@ -39,7 +40,7 @@ function ViewExamDetail() {
           tableData={item}
         ></TableData>
       )}
-    </div>
+    </>
   );
 }
 

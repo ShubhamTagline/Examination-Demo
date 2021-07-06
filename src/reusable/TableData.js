@@ -14,7 +14,6 @@ function TableData({ headingCol, tableData, buttonAction, viewExam }) {
       null,
       { "access-token": localGet("token") }
     );
-    console.log(`response`, response)
     alert(response.data.message)
     window.location.reload()
   };
@@ -89,7 +88,7 @@ function TableData({ headingCol, tableData, buttonAction, viewExam }) {
     });
 
   return (
-    <div>
+    <div className="container">
       <Table striped bordered hover size="sm">
         <thead>
           <tr>{headingCol && headingCol.map((val,index) => <th key={index}>{val}</th>)}</tr>

@@ -67,6 +67,10 @@ export const localGet = (val) => {
    return localStorage.getItem(val);
  };
   
+export const localSet=(title,value)=>{
+  return localStorage.setItem(title,value)
+}
+
 export const showLoader=()=>{
   return (
     <img

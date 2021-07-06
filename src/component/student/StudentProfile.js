@@ -4,6 +4,7 @@ import { profileAry } from "../../contain/FormAry";
 import InputFields from "../../reusable/InputFields";
 import { localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
+import Title from "../../reusable/Title";
 
 function StudentProfile() {
   const [item, setItem] = useState();
@@ -14,7 +15,6 @@ function StudentProfile() {
       const response = await reuseApi("get", "student/getStudentDetail", null, {
         "access-token": localGet("token"),
       });
-      if (response.status === 200) {
         setLoader(false);
         if (response.data.statusCode === 200) {
           setItem({
@@ -22,7 +22,6 @@ function StudentProfile() {
             emailProfile: response.data.data.email,
           });
         }
-      }
     };
     studentData();
   }, []);
@@ -48,8 +47,8 @@ function StudentProfile() {
   };
 
   return (
-    <div>
-      <h1>Student Profile</h1>
+    <>
+      <Title title="Student Profile"/>
       {loader && showLoader()}
       {item && (
         <form onSubmit={handleSubmit}>
@@ -60,7 +59,7 @@ function StudentProfile() {
           />
         </form>
       )}
-    </div>
+    </>
   );
 }
 

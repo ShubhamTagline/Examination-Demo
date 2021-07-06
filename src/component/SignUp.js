@@ -11,6 +11,7 @@ import {
   validRole,
 } from "../reusable/OtherReuse";
 import { reuseApi } from "../reusable/ReuseApi";
+import Title from "../reusable/Title";
 
 function SignUp() {
   const initialState = {
@@ -35,16 +36,16 @@ function SignUp() {
 
     switch (name) {
       case "name":
-        errors && (errors.name = validName(value))
+        errors && (errors.name = validName(value));
         break;
       case "email":
-        errors && (errors.email = validEmail(value))
+        errors && (errors.email = validEmail(value));
         break;
       case "password":
-        errors && (errors.password = validPassword(value))
+        errors && (errors.password = validPassword(value));
         break;
       case "role":
-        errors && (errors.role = validRole(value))
+        errors && (errors.role = validRole(value));
         break;
       default:
         break;
@@ -60,25 +61,21 @@ function SignUp() {
   const handleClick = async (e) => {
     e.preventDefault();
     if (validateForm(item.errors)) {
-      alert("Submit");
       delete item.errors;
-      const data = await reuseApi("post", "users/SignUp", item);
-      console.log(data);
-      if (data.status === 200) {
-        alert(data.data.message);
-        if (data.data.statusCode === 200) {
-          setItem(initialState);
-          e.target.reset();
-        }
+      const response = await reuseApi("post", "users/SignUp", item);
+      alert(response.data.message);
+      if (response.data.statusCode === 200) {
+        setItem(initialState);
+        e.target.reset();
       }
     } else {
-     alertMsg();
+      alertMsg();
     }
   };
 
   return (
-    <div>
-      <h1>SignUp Page</h1> <br />
+    <>
+      <Title title="SignUp" /> <br />
       <form onSubmit={handleClick}>
         <InputFields
           fields={signupAry}
@@ -89,7 +86,7 @@ function SignUp() {
       </form>
       <br />
       <Link to="/signIn"> Already have an Account ? Log In</Link>
-    </div>
+    </>
   );
 }
 

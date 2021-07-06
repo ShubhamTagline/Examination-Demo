@@ -5,6 +5,8 @@ import { newPassAry } from '../contain/FormAry'
 import InputFields from '../reusable/InputFields'
 import { alertMsg, validateForm, validPassword } from '../reusable/OtherReuse'
 import { reuseApi } from '../reusable/ReuseApi'
+import Title from "../reusable/Title";
+
 
 function NewPassword() {
   const initialState={
@@ -48,28 +50,25 @@ function NewPassword() {
   const handleClick=async(e)=>{
     e.preventDefault()
     if(validateForm(item.errors)){
-      alert('submit')
       const token=new URLSearchParams(search).get("token")
       delete item.errors
-      const data=await reuseApi("post",`users/ForgotPassword/Verify?token=${token}`,item)
-      if(data.status===200){
-        alert(data.data.message)
-        if(data.data.statusCode===200){
-          history.push("/signIn")
+      const response=await reuseApi("post",`users/ForgotPassword/Verify?token=${token}`,item)
+        alert(response.data.message);
+        if (response.data.statusCode === 200) {
+          history.push("/signIn");
         }
-      }
     }else{
       alertMsg();
     }
   }
   
   return (
-    <div>
-      <h1>New Password</h1>
+    <>
+      <Title title="New Password"></Title>
       <form onSubmit={handleClick}>
         <InputFields fields={newPassAry} onChange={handleChange} errors={item.errors}></InputFields>
       </form>
-    </div>
+    </>
   )
 }
 

@@ -21,8 +21,7 @@ function InputData({fields,data,onChange}) {
               }
               onChange={(e) => onChange(e, index, val)}
             />
-            {/* <div className="errorMsg mb-3">{errors && errors[val.name]}</div> */}
-          </div>
+           </div>
         );
       })}
     </div>

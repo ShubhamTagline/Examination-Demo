@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { localGet, showLoader } from '../../reusable/OtherReuse'
 import { reuseApi } from '../../reusable/ReuseApi'
 import TableData from '../../reusable/TableData'
+import Title from '../../reusable/Title'
  
 function ShowStudent() {
   const [item,setItem]=useState()
@@ -11,22 +12,20 @@ function ShowStudent() {
 
   useEffect(()=>{
     const userData=async()=>{
-      const data = await reuseApi("get", "dashboard/Teachers", null, {
+      const response = await reuseApi("get", "dashboard/Teachers", null, {
         "access-token": localGet("token"),
       });
-      if (data.status === 200) {
         setLoader(false)
-        if (data.data.statusCode === 200) {
-          setItem(data.data.data)
+        if (response.data.statusCode === 200) {
+          setItem(response.data.data);
         }
-      }
     }
     userData()
   },[])
 
   return (
-    <div className="container">
-      <h1>Show All Student</h1>
+    <>
+      <Title title="Show All Student"/>
       {loader && showLoader()}
       {item && (
         <TableData
@@ -35,7 +34,7 @@ function ShowStudent() {
           buttonAction={true}
         ></TableData>
       )}
-    </div>
+    </>
   );
 }
 

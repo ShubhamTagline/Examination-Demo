@@ -7,6 +7,7 @@ import { examPaper } from "../../contain/FormAry";
 import InputData from "../../reusable/InputData";
 import { ButtonField, localGet, showLoader } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
+import Title from "../../reusable/Title";
 
 function GiveExam() {
   const initialState = {
@@ -67,77 +68,76 @@ function GiveExam() {
     }
   }, [currentQuestion, result]);
 
-  const ShowPaper = () => {
-    const data = {};
-    data.question = item.id;
-    data.answer = item.answer;
-    let clonePaper = [...paper];
-    clonePaper.push(data);
-    setPaper(clonePaper);
-  };
-
   const handleSave = (e) => {
     e.preventDefault();
-    if (item.answer === "") {
-      alert("Please Select Answer");
-    } else {
-      ShowPaper();
+    if (item.answer) {
+      structureItem(item);
       let page = currentQuestion + 1;
       setCurrentQuestion(page);
+    }else{
+      alert("Please Select Answer");
     }
+  };
+
+  const structureItem = (item) => {
+      let clonePaper = [...paper];
+      const data = {};
+      data.question = item.id;
+      data.answer = item.answer;
+      clonePaper.push(data);
+      setPaper(clonePaper);
+      return { clonePaper };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (item.answer === "") {
+    const cloneData = structureItem(item);
+    if (item.answer) {
+      const response = await reuseApi(
+        "post",
+        `student/giveExam?id=${id}`,
+        cloneData.clonePaper,
+        {
+          "access-token": localGet("token"),
+        }
+      );
+      alert(response && response.data.message);
+    }else{
       alert("Please Select Answer");
-    } else {
-      if (paper.length === result.length - 1) {
-        ShowPaper();
-      }
-        const response = await reuseApi(
-          "post",
-          `student/giveExam?id=${id}`,
-          paper,
-          {
-            "access-token": localGet("token"),
-          }
-        );
-        console.log(`response`, response);
-        alert(response && response.data.message);
     }
   };
-  console.log(`paper`, paper);
+ 
   return (
-    <div className="container">
-      <h1>Give Exam Page</h1>
+    <>
+      <Title title="Give Exam"/>
       {loader && showLoader()}
-      <br />
       {result && (
         <>
           <p>{currentQuestion + 1}/7</p>
-          <InputData
-            fields={examPaper}
-            data={item}
-            onChange={handleChange}
-          ></InputData>
-          <br />
-          {currentQuestion < (result && result.length - 1) ? (
-            <ButtonField
-              variant="primary"
-              value="Save & Next"
-              onClick={(e) => handleSave(e)}
-            />
-          ) : (
-            <ButtonField
-              variant="primary"
-              value="Submit"
-              onClick={(e) => handleSubmit(e)}
-            />
-          )}
+          <form>
+            <InputData
+              fields={examPaper}
+              data={item}
+              onChange={handleChange}
+            ></InputData>
+            <br />
+            {currentQuestion < (result && result.length - 1) ? (
+              <ButtonField
+                variant="primary"
+                value="Save & Next"
+                onClick={(e) => handleSave(e)}
+              />
+            ) : (
+              <ButtonField
+                variant="primary"
+                value="Submit"
+                onClick={(e) => handleSubmit(e)}
+              />
+            )}
+          </form>
         </>
       )}
-    </div>
+    </>
   );
 }
 

@@ -12,6 +12,7 @@ import {
   validName,
 } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
+import Title from "../../reusable/Title";
 
 function CreateExam() {
   const initialError = {
@@ -170,9 +171,7 @@ function CreateExam() {
         structureItem.questions.push(data);
         localStorage.setItem("examPaper", JSON.stringify(structureItem));
       }
-      {
-        currentQuestion !== 14 && setItem(initialState);
-      }
+      currentQuestion !== 14 && setItem(initialState);
       const storageResult = JSON.parse(localStorage.getItem("examPaper"));
       setCurrentQuestion(storageResult.questions.length);
     }
@@ -210,9 +209,9 @@ function CreateExam() {
     showItemStructure(tempData);
   };
 
+  const tempData = Object.values(item.errors).some((val) => val.length > 1);
   const handlePrevious = (e) => {
     e.preventDefault();
-    const tempData = Object.values(item.errors).some((val) => val.length > 1);
     if (!tempData) {
       commonUpdate();
       let page = currentQuestion - 1;
@@ -222,7 +221,6 @@ function CreateExam() {
 
   const handleNext = (e) => {
     e.preventDefault();
-    const tempData = Object.values(item.errors).some((val) => val.length > 1);
     if (!tempData) {
       commonUpdate();
       if (storageItem.questions.length - currentQuestion === 1) {
@@ -242,7 +240,6 @@ function CreateExam() {
       const data = storageItem;
       storageItem.questions.length === 14 && handleClick(e);
       if (validateFormNext(item.errors)) {
-        console.log(`data`, data);
         const response = await reuseApi(
           "post",
           "dashboard/Teachers/Exam",
@@ -254,7 +251,6 @@ function CreateExam() {
           window.location.reload();
         alert(response.data.message);
         if (response.data.statusCode === 200) {
-          setCurrentQuestion(0);
           localStorage.removeItem("examPaper");
         }
       }
@@ -293,8 +289,8 @@ function CreateExam() {
   };
 
   return (
-    <div>
-      <h1>Create Exam Module</h1>
+    <>
+      <Title title="Create Exam "/>
       <form>
         <OptionField
           values={subjectAry}
@@ -360,7 +356,7 @@ function CreateExam() {
           <ButtonField value="Previous" onClick={handlePrevious} />
         )}
       </form>
-    </div>
+    </>
   );
 }
 export default CreateExam;

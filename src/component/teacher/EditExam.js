@@ -11,6 +11,7 @@ import {
   validName,
 } from "../../reusable/OtherReuse";
 import { reuseApi } from "../../reusable/ReuseApi";
+import Title from "../../reusable/Title";
 
 function EditExam() {
   const search = useLocation().search;
@@ -51,7 +52,6 @@ function EditExam() {
   }, []);
 
   const handleChange = (e, index) => {
-    e.preventDefault();
     const name = e.target.name;
     const value = e.target.value;
     let errors = item.errors;
@@ -85,11 +85,10 @@ function EditExam() {
     } else if (index === 7) {
       item.answer = item.opt4;
     }
-
     if (item.answer !== "") {
       item.errors.answer = "";
     }
-
+ 
     setItem({
       ...item,
       [name]: value ? value.trim() && value.replace(/\s+/g, " ") : value,
@@ -177,8 +176,8 @@ function EditExam() {
   };
 
   return (
-    <div>
-      <h1>Edit Exam</h1>
+    <>
+      <Title title="Edit Exam"/>
       <p>{currentQuestion + 1}/15</p>
       <form>
         <InputFields
@@ -201,7 +200,7 @@ function EditExam() {
           <ButtonField value="Previous" onClick={handlePrevious} />
         )}
       </form>
-    </div>
+    </>
   );
 }
 
