@@ -4,14 +4,11 @@ import { signupAry } from "../contain/FormAry";
 import InputFields from "../reusable/InputFields";
 import {
   alertMsg,
-  validateForm,
-  validEmail,
-  validName,
-  validPassword,
-  validRole,
+  validateForm
 } from "../reusable/OtherReuse";
 import { reuseApi } from "../reusable/ReuseApi";
 import Title from "../reusable/Title";
+import { handleCase } from "../reusable/ValidCase";
 
 function SignUp() {
   const initialState = {
@@ -33,23 +30,8 @@ function SignUp() {
     let name = e.target.name;
     let value = e.target.value;
     let errors = item.errors;
-
-    switch (name) {
-      case "name":
-        errors && (errors.name = validName(value));
-        break;
-      case "email":
-        errors && (errors.email = validEmail(value));
-        break;
-      case "password":
-        errors && (errors.password = validPassword(value));
-        break;
-      case "role":
-        errors && (errors.role = validRole(value));
-        break;
-      default:
-        break;
-    }
+ 
+    handleCase(name,value,errors)
 
     setItem({
       ...item,
@@ -57,7 +39,7 @@ function SignUp() {
       errors,
     });
   };
-
+ 
   const handleClick = async (e) => {
     e.preventDefault();
     if (validateForm(item.errors)) {

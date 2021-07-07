@@ -11,6 +11,7 @@ import {
 } from "../reusable/OtherReuse";
 import { reuseApi } from "../reusable/ReuseApi";
 import Title from "../reusable/Title";
+import { handleCase } from "../reusable/ValidCase";
 
 function ResetPass() {
   const initialState = {
@@ -31,19 +32,21 @@ function ResetPass() {
     let value = e.target.value;
     let errors = item.errors;
 
-    switch (name) {
-      case "oldPassword":
-        errors && (errors.oldPassword = validPassword(value));
-        break;
-      case "Password":
-        errors && (errors.Password = validPassword(value));
-        break;
-      case "ConfirmPassword":
-        errors && (errors.ConfirmPassword = validPassword(value));
-        break;
-      default:
-        break;
-    }
+    handleCase(name,value,errors)
+
+    // switch (name) {
+    //   case "oldPassword":
+    //     errors && (errors.oldPassword = validPassword(value));
+    //     break;
+    //   case "Password":
+    //     errors && (errors.Password = validPassword(value));
+    //     break;
+    //   case "ConfirmPassword":
+    //     errors && (errors.ConfirmPassword = validPassword(value));
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     setItem({
       ...item,
@@ -51,6 +54,7 @@ function ResetPass() {
       errors,
     });
   };
+  console.log(`item.errors`, item.errors)
 
   let history = useHistory();
   const handleSubmit = async (e) => {
