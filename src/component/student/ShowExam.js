@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Table } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { ButtonField, localGet} from "../../reusable/OtherReuse";
-import { reuseApi } from "../../reusable/ReuseApi";
-import Title from "../../reusable/Title";
-import Loader from "../../reusable/Loader";
+import { ButtonField, localGet} from "../../shared/OtherReuse";
+import { reuseApi } from "../../shared/ReuseApi";
+import Title from "../../shared/Title";
+import Loader from "../../shared/Loader";
 
 function ShowExam() {
   let history = useHistory();

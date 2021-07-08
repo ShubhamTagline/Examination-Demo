@@ -1,12 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { forgotAry } from "../contain/FormAry";
-import InputFields from "../reusable/InputFields";
-import { alertMsg, validateForm, validEmail } from "../reusable/OtherReuse";
-import { reuseApi } from "../reusable/ReuseApi";
-import Title from "../reusable/Title";
-
+import { forgotAry } from "../shared/FormAry";
+import FormWithTitle from "../shared/FormWithTitle";
+ import { alertMsg, validateForm, validEmail } from "../shared/OtherReuse";
+import { reuseApi } from "../shared/ReuseApi";
+ 
 function ForgotPass() {
   const initialState = {
     email: "",
@@ -52,15 +51,14 @@ function ForgotPass() {
 
   return (
     <>
-      <Title title="Forgot Password"></Title> <br />
-      <form onSubmit={handleClick}>
-        <InputFields
-          fields={forgotAry}
-          onChange={handleChange}
-          errors={item.errors}
-          data={item}
-        ></InputFields>
-      </form> 
+      <FormWithTitle
+        title="Forgot Password"
+        item={item}
+        handleSubmit={handleClick}
+        list={forgotAry}
+        handleChange={handleChange}
+        errors={item.errors}
+      />
       <br />
       <Link to="/signIn">Back to Login?</Link>
     </>

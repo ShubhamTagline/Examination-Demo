@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { signupAry } from "../contain/FormAry";
-import InputFields from "../reusable/InputFields";
+import { signupAry } from "../shared/FormAry";
+import FormWithTitle from "../shared/FormWithTitle";
 import {
   alertMsg,
   validateForm,
@@ -9,9 +9,8 @@ import {
   validName,
   validPassword,
   validRole,
-} from "../reusable/OtherReuse";
-import { reuseApi } from "../reusable/ReuseApi";
-import Title from "../reusable/Title";
+} from "../shared/OtherReuse";
+import { reuseApi } from "../shared/ReuseApi";
 
 function SignUp() {
   const initialState = {
@@ -75,15 +74,14 @@ function SignUp() {
 
   return (
     <>
-      <Title title="SignUp" /> <br />
-      <form onSubmit={handleClick}>
-        <InputFields
-          fields={signupAry}
-          onChange={handleChange}
-          errors={item.errors}
-          data={item}
-        />
-      </form>
+      <FormWithTitle
+        title="SignUp"
+        item={item}
+        handleSubmit={handleClick}
+        list={signupAry}
+        handleChange={handleChange}
+        errors={item.errors}
+      />
       <br />
       <Link to="/signIn"> Already have an Account ? Log In</Link>
     </>

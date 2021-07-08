@@ -16,7 +16,7 @@ function InputFields({ fields, data, errors, onChange,submitDisable}) {
               placeholder={val.placeholder}
               value={val.value ? val.value : data && data[val.name]}
               checked={
-                data.answer &&
+                data && data.answer &&
                 data[fields?.data[index + 1]?.name] === data.answer
               }
               {...(val.type === "password" && { autoComplete: "on" })}

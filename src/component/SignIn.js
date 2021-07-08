@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { signInAry } from "../contain/FormAry";
-import InputFields from "../reusable/InputFields";
+import { signInAry } from "../shared/FormAry";
+import FormWithTitle from "../shared/FormWithTitle";
 import {
   alertMsg,
   localSet,
   validateForm,
   validEmail,
   validPassword,
-} from "../reusable/OtherReuse";
-import { reuseApi } from "../reusable/ReuseApi";
-import Title from "../reusable/Title";
+} from "../shared/OtherReuse";
+import { reuseApi } from "../shared/ReuseApi";
 
 function SignIn() {
   const initialState = {
@@ -72,16 +71,14 @@ function SignIn() {
 
   return (
     <>
-      <Title title="SignIn"></Title>
-      <br />
-      <form onSubmit={handleClick}>
-        <InputFields
-          fields={signInAry}
-          onChange={handleChange}
-          errors={item.errors}
-          data={item}
-        ></InputFields>
-      </form>
+      <FormWithTitle
+        title="SignIn"
+        item={item}
+        handleSubmit={handleClick}
+        list={signInAry}
+        handleChange={handleChange}
+        errors={item.errors}
+      />
       <br />
       <Link to="/"> Don't have an Account ? Sign Up </Link> <br />
       <Link to="/forgot">Forgot Password?</Link>

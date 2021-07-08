@@ -3,12 +3,12 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
-import { examPaper } from "../../contain/FormAry";
-import InputData from "../../reusable/InputData";
-import { ButtonField, localGet, loader } from "../../reusable/OtherReuse";
-import { reuseApi } from "../../reusable/ReuseApi";
-import Title from "../../reusable/Title";
-import Loader from "../../reusable/Loader";
+import { examPaper } from "../../shared/FormAry";
+import InputData from "../../shared/InputData";
+import { ButtonField, localGet, loader } from "../../shared/OtherReuse";
+import { reuseApi } from "../../shared/ReuseApi";
+import Title from "../../shared/Title";
+import Loader from "../../shared/Loader";
 
 function GiveExam() {
   const initialState = {

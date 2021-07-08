@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { resetPassAry } from "../contain/FormAry";
-import InputFields from "../reusable/InputFields";
-import {
+import { resetPassAry } from "../shared/FormAry";
+import FormWithTitle from "../shared/FormWithTitle";
+ import {
   alertMsg,
   validateForm,
   validPassword,
   localGet,
-} from "../reusable/OtherReuse";
-import { reuseApi } from "../reusable/ReuseApi";
-import Title from "../reusable/Title";
-
+} from "../shared/OtherReuse";
+import { reuseApi } from "../shared/ReuseApi";
+ 
 function ResetPass() {
   const initialState = {
     oldPassword: "",
@@ -74,24 +73,20 @@ function ResetPass() {
 
   return (
     <>
-      <Title title="Reset Password" /> <br />
-      <form onSubmit={handleSubmit}>
-        <InputFields
-          fields={resetPassAry}
-          onChange={handleChange}
-          errors={item.errors}
-          data={item}
-        ></InputFields>
-        <br />
-        <br />
-        <Link
-          to={
-            localGet("role") === "student" ? "/studentAdmin" : "/teacherAdmin"
-          }
-        >
-          Back to Home?
-        </Link>
-      </form>
+      <FormWithTitle
+        title="Reset Password"
+        item={item}
+        handleSubmit={handleSubmit}
+        list={resetPassAry}
+        handleChange={handleChange}
+        errors={item.errors}
+      />
+      <br />
+      <Link
+        to={localGet("role") === "student" ? "/studentAdmin" : "/teacherAdmin"}
+      >
+        Back to Home?
+      </Link>
     </>
   );
 }
