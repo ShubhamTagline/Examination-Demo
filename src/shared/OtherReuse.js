@@ -42,12 +42,12 @@ export const validEmail = (value) => {
   return "";
 };
 
-export const validPassword = (value) => {
+export const validPassword = (value,name) => {
   if (value.trim() === "") {
     return "*Required";
   }
   if(value.length < 7){
-    return "Password is Too short"
+    return `${name} is Too short`
   }
   return "";
 };

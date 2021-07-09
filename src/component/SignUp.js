@@ -2,15 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { signupAry } from "../shared/FormAry";
 import FormWithTitle from "../shared/FormWithTitle";
-import {
-  alertMsg,
-  validateForm,
-  validEmail,
-  validName,
-  validPassword,
-  validRole,
-} from "../shared/OtherReuse";
+import { alertMsg, validateForm } from "../shared/OtherReuse";
 import { reuseApi } from "../shared/ReuseApi";
+import { handleCase } from "../shared/ValidCase";
 
 function SignUp() {
   const initialState = {
@@ -33,22 +27,7 @@ function SignUp() {
     let value = e.target.value;
     let errors = item.errors;
 
-    switch (name) {
-      case "name":
-        errors && (errors.name = validName(value));
-        break;
-      case "email":
-        errors && (errors.email = validEmail(value));
-        break;
-      case "password":
-        errors && (errors.password = validPassword(value));
-        break;
-      case "role":
-        errors && (errors.role = validRole(value));
-        break;
-      default:
-        break;
-    }
+    handleCase(name, value, errors);
 
     setItem({
       ...item,

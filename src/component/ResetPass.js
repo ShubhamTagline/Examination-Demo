@@ -3,14 +3,16 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { resetPassAry } from "../shared/FormAry";
 import FormWithTitle from "../shared/FormWithTitle";
- import {
+import {
   alertMsg,
   validateForm,
   validPassword,
   localGet,
 } from "../shared/OtherReuse";
 import { reuseApi } from "../shared/ReuseApi";
- 
+
+import { handleCase } from "../shared/ValidCase";
+
 function ResetPass() {
   const initialState = {
     oldPassword: "",
@@ -30,19 +32,21 @@ function ResetPass() {
     let value = e.target.value;
     let errors = item.errors;
 
-    switch (name) {
-      case "oldPassword":
-        errors && (errors.oldPassword = validPassword(value));
-        break;
-      case "Password":
-        errors && (errors.Password = validPassword(value));
-        break;
-      case "ConfirmPassword":
-        errors && (errors.ConfirmPassword = validPassword(value));
-        break;
-      default:
-        break;
-    }
+    handleCase(name, value, errors);
+
+    // switch (name) {
+    //   case "oldPassword":
+    //     errors && (errors.oldPassword = validPassword(value));
+    //     break;
+    //   case "Password":
+    //     errors && (errors.Password = validPassword(value));
+    //     break;
+    //   case "ConfirmPassword":
+    //     errors && (errors.ConfirmPassword = validPassword(value));
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     setItem({
       ...item,
@@ -50,6 +54,7 @@ function ResetPass() {
       errors,
     });
   };
+  console.log(`item.errors`, item.errors);
 
   let history = useHistory();
   const handleSubmit = async (e) => {

@@ -2,14 +2,9 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { signInAry } from "../shared/FormAry";
 import FormWithTitle from "../shared/FormWithTitle";
-import {
-  alertMsg,
-  localSet,
-  validateForm,
-  validEmail,
-  validPassword,
-} from "../shared/OtherReuse";
+import { alertMsg, localSet, validateForm } from "../shared/OtherReuse";
 import { reuseApi } from "../shared/ReuseApi";
+import { handleCase } from "../shared/ValidCase";
 
 function SignIn() {
   const initialState = {
@@ -27,16 +22,7 @@ function SignIn() {
     let value = e.target.value;
     let errors = item.errors;
 
-    switch (name) {
-      case "email":
-        errors && (errors.email = validEmail(value));
-        break;
-      case "password":
-        errors && (errors.password = validPassword(value));
-        break;
-      default:
-        break;
-    }
+    handleCase(name, value, errors);
 
     setItem({
       ...item,
@@ -46,7 +32,6 @@ function SignIn() {
   };
 
   let history = useHistory();
-
   const handleClick = async (e) => {
     e.preventDefault();
     if (validateForm(item.errors)) {
