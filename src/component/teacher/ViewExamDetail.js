@@ -1,11 +1,9 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { localGet } from "../../reusable/OtherReuse";
-import { reuseApi } from "../../reusable/ReuseApi";
-import TableData from "../../reusable/TableData";
-import Title from "../../reusable/Title";
-import Loader from "../../reusable/Loader";
+import { localGet } from "../../shared/OtherReuse";
+import { reuseApi } from "../../shared/ReuseApi";
+import TitleWithTable from "../../shared/TitleWithTable";
 
 function ViewExamDetail() {
   const [item, setItem] = useState();
@@ -21,27 +19,21 @@ function ViewExamDetail() {
         null,
         { "access-token": localGet("token") }
       );
-      if (response.status === 200) {
-        setLoader(false);
-        if (response.data.statusCode === 200) {
-          setItem(response.data.data.questions);
-        }
+      setLoader(false);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data.data?.questions);
       }
     };
     userData();
   }, []);
-  
+
   return (
-    <>
-      <Title title="Exam Paper"/>
-      {loader && <Loader/>}
-      {item && (
-        <TableData
-          headingCol={["question", "options", "answer"]}
-          tableData={item}
-        ></TableData>
-      )}
-    </>
+    <TitleWithTable
+      title="Exam Paper"
+      loader={loader}
+      item={item}
+      header={["question", "options", "answer"]}
+    />
   );
 }
 

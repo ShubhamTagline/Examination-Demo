@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Loader from "../../reusable/Loader";
-import { localGet  } from "../../reusable/OtherReuse";
-import { reuseApi } from "../../reusable/ReuseApi";
-import TableData from "../../reusable/TableData";
-import Title from "../../reusable/Title";
+import { localGet } from "../../shared/OtherReuse";
+import { reuseApi } from "../../shared/ReuseApi";
+import TitleWithTable from "../../shared/TitleWithTable";
 
 function ViewExam() {
   const [item, setItem] = useState();
@@ -11,23 +9,30 @@ function ViewExam() {
 
   useEffect(() => {
     const userData = async () => {
-      const response = await reuseApi("get", "dashboard/Teachers/viewExam", null, {
-        "access-token": localGet("token"),
-      });
+      const response = await reuseApi(
+        "get",
+        "dashboard/Teachers/viewExam",
+        null,
+        {
+          "access-token": localGet("token"),
+        }
+      );
       setLoader(false);
-      if (response.data.statusCode === 200) {
-        setItem(response.data.data);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data?.data);
       }
     };
     userData();
   }, []);
 
   return (
-    <>
-      <Title title="View Exam Details"></Title>
-      {loader && <Loader/>}
-      {item && <TableData headingCol={["_id", "email", "subjectName","notes"]} tableData={item} buttonAction={false} viewExam={true} ></TableData>}
-    </>
+    <TitleWithTable
+      title="View Exam Details"
+      loader={loader}
+      item={item}
+      header={["_id", "email", "subjectName", "notes"]}
+      btnView={true}
+    />
   );
 }
 

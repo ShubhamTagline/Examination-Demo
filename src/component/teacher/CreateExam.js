@@ -1,18 +1,19 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { questionAry, subjectAry } from "../../contain/FormAry";
-import InputFields from "../../reusable/InputFields";
-import OptionField from "../../reusable/OptionField";
+import { questionAry, subjectAry } from "../../shared/FormAry";
+import InputFields from "../../shared/InputFields";
+import OptionField from "../../shared/OptionField";
 import {
   ButtonField,
   localGet,
+  localSet,
   validateForm,
   validateFormNext,
-  validName,
-} from "../../reusable/OtherReuse";
-import { reuseApi } from "../../reusable/ReuseApi";
-import Title from "../../reusable/Title";
+} from "../../shared/OtherReuse";
+import { reuseApi } from "../../shared/ReuseApi";
+import Title from "../../shared/Title";
+import { handleCase } from "../../shared/ValidCase";
 
 function CreateExam() {
   const initialError = {
@@ -36,7 +37,7 @@ function CreateExam() {
     errors: initialError,
   };
 
-  const storageItem = JSON.parse(localStorage.getItem("examPaper"));
+  const storageItem = JSON.parse(localGet("examPaper"));
   const [item, setItem] = useState(initialState);
   const [note, setNote] = useState({ note: [""], errors: " " });
   const [currentQuestion, setCurrentQuestion] = useState(
@@ -46,30 +47,10 @@ function CreateExam() {
   const handleChange = (e, index) => {
     const name = e.target.name;
     const value = e.target.value;
-    let errors = item.errors;
 
-    switch (name) {
-      case "question":
-        errors.question = validName(value, "Question");
-        break;
-      case "opt1":
-        errors.opt1 = validName(value, "Option");
-        break;
-      case "opt2":
-        errors.opt2 = validName(value, "Option");
-        break;
-      case "opt3":
-        errors.opt3 = validName(value, "Option");
-        break;
-      case "opt4":
-        errors.opt4 = validName(value, "Option");
-        break;
-      case "subjectName":
-        errors.subjectName = validName(value);
-        break;
-      default:
-        break;
-    }
+    let cloneItem = { ...item };
+    let data = handleCase(name, value);
+    cloneItem.errors[name] = (data && data) || "";
 
     if (index === 1) {
       item.answer = item.opt1;
@@ -88,7 +69,7 @@ function CreateExam() {
     setItem({
       ...item,
       [name]: value ? value.trim() && value.replace(/\s+/g, " ") : value,
-      errors,
+      errors: cloneItem.errors,
     });
   };
 
@@ -163,37 +144,34 @@ function CreateExam() {
         {
           currentQuestion === 14 && (tempData.notes = note.note);
         }
-        localStorage.setItem("examPaper", JSON.stringify(tempData));
+        localSet("examPaper", JSON.stringify(tempData));
       } else {
         let structureItem = {};
         structureItem.subjectName = item.subjectName;
         structureItem.questions = [];
         structureItem.questions.push(data);
-        localStorage.setItem("examPaper", JSON.stringify(structureItem));
+        localSet("examPaper", JSON.stringify(structureItem));
       }
       currentQuestion !== 14 && setItem(initialState);
-      const storageResult = JSON.parse(localStorage.getItem("examPaper"));
-      setCurrentQuestion(storageResult.questions.length);
+      setCurrentQuestion(storageItem && storageItem?.questions.length);
     }
   };
 
   const commonUpdate = () => {
     const tempUpdate = Object.values(item.errors).some((val) => val === "");
-    if (tempUpdate) {
-      if (validateFormNext(item.errors)) {
-        if (confirm("Are you sure you want to Update Question")) {
-          const data = itemStructure();
-          const tempData = storageItem;
-          currentQuestion === 0 && (tempData.subjectName = item.subjectName);
-          tempData.questions[currentQuestion] = data;
-          localStorage.setItem("examPaper", JSON.stringify(tempData));
-          let cloneItem = { ...item };
-          cloneItem.errors = initialError;
-          setItem(cloneItem);
-        } else {
-          const tempVar = storageItem.questions[currentQuestion];
-          showItemStructure(tempVar);
-        }
+    if (tempUpdate && validateFormNext(item.errors)) {
+      if (confirm("Are you sure you want to Update Question")) {
+        const data = itemStructure();
+        const tempData = storageItem;
+        currentQuestion === 0 && (tempData.subjectName = item.subjectName);
+        tempData.questions[currentQuestion] = data;
+        localStorage.setItem("examPaper", JSON.stringify(tempData));
+        let cloneItem = { ...item };
+        cloneItem.errors = initialError;
+        setItem(cloneItem);
+      } else {
+        const tempVar = storageItem.questions[currentQuestion];
+        showItemStructure(tempVar);
       }
     }
   };
@@ -247,8 +225,8 @@ function CreateExam() {
           {
             "access-token": localGet("token"),
           }
-          );
-          window.location.reload();
+        );
+        window.location.reload();
         alert(response.data.message);
         if (response.data.statusCode === 200) {
           localStorage.removeItem("examPaper");
@@ -281,16 +259,14 @@ function CreateExam() {
   const handleDelete = (e, index) => {
     e.preventDefault();
     const cloneNote = { ...note };
-    {
-      cloneNote.note.length > 0 && cloneNote.note.splice(index, 1);
-    }
+    cloneNote.note.length > 0 && cloneNote.note.splice(index, 1);
     cloneNote.errors = " ";
     setNote(cloneNote);
   };
 
   return (
     <>
-      <Title title="Create Exam "/>
+      <Title title="Create Exam " />
       <form>
         <OptionField
           values={subjectAry}

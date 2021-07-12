@@ -59,7 +59,7 @@ export const newPassAry = {
   data: [
     {
       type: "password",
-      name: "Password",
+      name: "password",
       placeholder: "Enter Password",
     },
     {
@@ -79,7 +79,7 @@ export const resetPassAry = {
     },
     {
       type: "password",
-      name: "Password",
+      name: "password",
       placeholder: "Enter New Password",
     },
     {
@@ -177,7 +177,7 @@ export const examPaper = {
     {
       type: "text",
       name: "question",
-      label:"Question:"
+      label: "Question:",
     },
     {
       type: "radio",
@@ -186,7 +186,7 @@ export const examPaper = {
     },
     {
       type: "text",
-      name: "opt1"
+      name: "opt1",
     },
     {
       type: "radio",
@@ -214,6 +214,6 @@ export const examPaper = {
     {
       type: "text",
       name: "opt4",
-    } 
+    },
   ],
 };

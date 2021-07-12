@@ -1,72 +1,56 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { resetPassAry } from "../contain/FormAry";
-import InputFields from "../reusable/InputFields";
-import {
-  alertMsg,
-  validateForm,
-  validPassword,
-  localGet,
-} from "../reusable/OtherReuse";
-import { reuseApi } from "../reusable/ReuseApi";
-import Title from "../reusable/Title";
-import { handleCase } from "../reusable/ValidCase";
+import { resetPassAry } from "../shared/FormAry";
+import FormWithTitle from "../shared/FormWithTitle";
+import { alertMsg, validateForm, localGet } from "../shared/OtherReuse";
+import { reuseApi } from "../shared/ReuseApi";
+import { handleCase } from "../shared/ValidCase";
+
+const initialState = {
+  oldPassword: "",
+  password: "",
+  ConfirmPassword: "",
+  errors: {
+    oldPassword: " ",
+    password: " ",
+    ConfirmPassword: " ",
+  },
+};
 
 function ResetPass() {
-  const initialState = {
-    oldPassword: "",
-    Password: "",
-    ConfirmPassword: "",
-    errors: {
-      oldPassword: " ",
-      Password: " ",
-      ConfirmPassword: " ",
-    },
-  };
-
-  const [item, setItem] = useState(initialState);
+  const [item, setItem] = useState({ ...initialState });
 
   const handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    let errors = item.errors;
 
-    handleCase(name,value,errors)
-
-    // switch (name) {
-    //   case "oldPassword":
-    //     errors && (errors.oldPassword = validPassword(value));
-    //     break;
-    //   case "Password":
-    //     errors && (errors.Password = validPassword(value));
-    //     break;
-    //   case "ConfirmPassword":
-    //     errors && (errors.ConfirmPassword = validPassword(value));
-    //     break;
-    //   default:
-    //     break;
-    // }
+    let cloneItem = { ...item };
+    let data = handleCase(name, value);
+    cloneItem.errors[name] = (data && data) || "";
 
     setItem({
       ...item,
       [name]: value,
-      errors,
+      errors: cloneItem.errors,
     });
   };
-  console.log(`item.errors`, item.errors)
 
   let history = useHistory();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm(item.errors)) {
-      delete item.errors;
-      const response = await reuseApi("post", "users/ResetPassword", item, {
+      let payLoad = {
+        oldPassword: item.oldPassword,
+        Password: item.password,
+        ConfirmPassword: item.ConfirmPassword,
+      };
+      const response = await reuseApi("post", "users/ResetPassword", payLoad, {
         "access-token": localGet("token"),
       });
-      alert(response.data.message);
-      if (response.data.statusCode === 200) {
-        setItem(initialState);
+      alert(response?.data?.message);
+      if (response?.data?.statusCode === 200) {
+        setItem({ ...initialState });
         localGet("role") === "student"
           ? history.push("/studentAdmin")
           : history.push("/teacherAdmin");
@@ -78,24 +62,20 @@ function ResetPass() {
 
   return (
     <>
-      <Title title="Reset Password" /> <br />
-      <form onSubmit={handleSubmit}>
-        <InputFields
-          fields={resetPassAry}
-          onChange={handleChange}
-          errors={item.errors}
-          data={item}
-        ></InputFields>
-        <br />
-        <br />
-        <Link
-          to={
-            localGet("role") === "student" ? "/studentAdmin" : "/teacherAdmin"
-          }
-        >
-          Back to Home?
-        </Link>
-      </form>
+      <FormWithTitle
+        title="Reset Password"
+        item={item}
+        handleSubmit={handleSubmit}
+        list={resetPassAry}
+        handleChange={handleChange}
+        errors={item.errors}
+      />
+      <br />
+      <Link
+        to={localGet("role") === "student" ? "/studentAdmin" : "/teacherAdmin"}
+      >
+        Back to Home?
+      </Link>
     </>
   );
 }

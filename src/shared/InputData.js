@@ -1,10 +1,9 @@
-import React from 'react'
+import React from "react";
 
-function InputData({fields,data,onChange}) {
-   
+function InputData({ fields, data, onChange }) {
   return (
     <div>
-      {fields.data.map((val,index)=>{
+      {fields.data.map((val, index) => {
         return (
           <div key={index}>
             {val.label && <label>{val.label} &nbsp;</label>}
@@ -13,7 +12,7 @@ function InputData({fields,data,onChange}) {
               name={val.name}
               placeholder={val.placeholder}
               className="mb-3"
-              value={(data && data[val.name]) || '' }
+              value={(data && data[val.name]) || ""}
               readOnly
               checked={
                 data.answer &&
@@ -21,11 +20,11 @@ function InputData({fields,data,onChange}) {
               }
               onChange={(e) => onChange(e, index, val)}
             />
-           </div>
+          </div>
         );
       })}
     </div>
-  )
+  );
 }
 
-export default InputData
+export default InputData;

@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Title from "../../shared/Title";
 
 function StudentAdmin() {
   return (
     <div className="App">
-      <h1>Student Admin Module</h1>
+      <Title title="Student Admin" />
       <Link to="/showExam" className="m-3">
         View Exam
       </Link>

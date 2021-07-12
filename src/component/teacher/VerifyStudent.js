@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { localGet } from "../../reusable/OtherReuse";
-import { reuseApi } from "../../reusable/ReuseApi";
-import TableData from "../../reusable/TableData";
-import Title from "../../reusable/Title";
-import Loader from "../../reusable/Loader";
+import { localGet } from "../../shared/OtherReuse";
+import { reuseApi } from "../../shared/ReuseApi";
+import TitleWithTable from "../../shared/TitleWithTable";
 
 function VerifyStudent() {
   const [item, setItem] = useState();
@@ -17,25 +15,21 @@ function VerifyStudent() {
         null,
         { "access-token": localGet("token") }
       );
-        setLoader(false);
-        if (response.data.statusCode === 200) {
-          setItem(response.data.data);
-        }
+      setLoader(false);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data?.data);
+      }
     };
     userData();
   }, []);
 
   return (
-    <>
-      <Title title="Verify Student "/>
-      {loader && <Loader />}
-      {item && (
-        <TableData
-          headingCol={["email", "name", "status"]}
-          tableData={item}
-        ></TableData>
-      )}
-    </>
+    <TitleWithTable
+      title="Verify Student"
+      loader={loader}
+      item={item}
+      header={["email", "name", "status"]}
+    />
   );
 }
 

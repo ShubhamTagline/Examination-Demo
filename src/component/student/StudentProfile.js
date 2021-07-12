@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { profileAry } from "../../contain/FormAry";
-import InputFields from "../../reusable/InputFields";
-import { localGet} from "../../reusable/OtherReuse";
-import { reuseApi } from "../../reusable/ReuseApi";
-import Title from "../../reusable/Title";
-import Loader from "../../reusable/Loader";
+import { profileAry } from "../../shared/FormAry";
+import { localGet } from "../../shared/OtherReuse";
+import { reuseApi } from "../../shared/ReuseApi";
+import FormWithTitle from "../../shared/FormWithTitle";
 
 function StudentProfile() {
   const [item, setItem] = useState();
@@ -16,13 +14,13 @@ function StudentProfile() {
       const response = await reuseApi("get", "student/getStudentDetail", null, {
         "access-token": localGet("token"),
       });
-        setLoader(false);
-        if (response.data.statusCode === 200) {
-          setItem({
-            name: response.data.data.name,
-            emailProfile: response.data.data.email,
-          });
-        }
+      setLoader(false);
+      if (response?.data?.statusCode === 200) {
+        setItem({
+          name: response.data?.data?.name,
+          emailProfile: response.data?.data?.email,
+        });
+      }
     };
     studentData();
   }, []);
@@ -48,19 +46,14 @@ function StudentProfile() {
   };
 
   return (
-    <>
-      <Title title="Student Profile"/>
-      {loader && <Loader/>}
-      {item && (
-        <form onSubmit={handleSubmit}>
-          <InputFields
-            fields={profileAry}
-            data={item}
-            onChange={handleChange}
-          />
-        </form>
-      )}
-    </>
+    <FormWithTitle
+      title="Student Profile"
+      loader={loader}
+      item={item}
+      handleSubmit={handleSubmit}
+      list={profileAry}
+      handleChange={handleChange}
+    />
   );
 }
 
