@@ -99,8 +99,7 @@ function CreateExam() {
   useEffect(() => {
     storageItem && setCurrentQuestion(currentQuestion - 1);
     if (storageItem) {
-      const tempStorage =
-        storageItem && storageItem.questions[currentQuestion - 1];
+      const tempStorage = storageItem.questions[currentQuestion - 1];
       showItemStructure(tempStorage, storageItem.subjectName);
     } else {
       setItem(initialState);
@@ -109,10 +108,10 @@ function CreateExam() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    if (storageItem && storageItem.subjectName) {
+    if (storageItem && storageItem?.subjectName) {
       let tempRecord = { ...item };
-      item.subjectName = storageItem.subjectName;
-      item.errors.subjectName = "";
+      tempRecord.subjectName = storageItem.subjectName;
+      tempRecord.errors.subjectName = "";
       setItem(tempRecord);
     }
     const validData = (itemVal, question, msg) => {
@@ -125,10 +124,9 @@ function CreateExam() {
       }
     };
     const optionMsg = "Please Enter Option";
-    {
-      currentQuestion === 0 &&
-        validData(item.subjectName, "subjectName", "Please Choose Subject");
-    }
+
+    currentQuestion === 0 &&
+      validData(item.subjectName, "subjectName", "Please Choose Subject");
     validData(item.question, "question", "Please Enter Question");
     validData(item.opt1, "opt1", optionMsg);
     validData(item.opt2, "opt2", optionMsg);
@@ -162,7 +160,7 @@ function CreateExam() {
     if (tempUpdate && validateFormNext(item.errors)) {
       if (confirm("Are you sure you want to Update Question")) {
         const data = itemStructure();
-        const tempData = storageItem;
+        const tempData = { ...storageItem };
         currentQuestion === 0 && (tempData.subjectName = item.subjectName);
         tempData.questions[currentQuestion] = data;
         localStorage.setItem("examPaper", JSON.stringify(tempData));
@@ -213,24 +211,16 @@ function CreateExam() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    delete item.errors.subjectName;
     if (validateFormNext(item.errors)) {
       const data = storageItem;
       storageItem.questions.length === 14 && handleClick(e);
-      if (validateFormNext(item.errors)) {
-        const response = await reuseApi(
-          "post",
-          "dashboard/Teachers/Exam",
-          data,
-          {
-            "access-token": localGet("token"),
-          }
-        );
-        window.location.reload();
-        alert(response.data.message);
-        if (response.data.statusCode === 200) {
-          localStorage.removeItem("examPaper");
-        }
+      const response = await reuseApi("post", "dashboard/Teachers/Exam", data, {
+        "access-token": localGet("token"),
+      });
+      window.location.reload();
+      alert(response.data.message);
+      if (response.data.statusCode === 200) {
+        localStorage.removeItem("examPaper");
       }
     }
   };

@@ -2,25 +2,41 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Title from "../../shared/Title";
 
+const data = [
+  {
+    to: "/createExam",
+    title: "Create Exam",
+  },
+  {
+    to: "/viewExam",
+    title: "View Exam",
+  },
+  {
+    to: "/showStudent",
+    title: "Show Student",
+  },
+  {
+    to: "/createExam",
+    title: "Create Exam",
+  },
+  {
+    to: "/verifyStudent",
+    title: "Verify Student",
+  },
+  {
+    to: "/resetPassword",
+    title: "Change Password",
+  },
+];
 function TeacherAdmin() {
   return (
     <>
       <Title title="Teacher Admin" />
-      <Link to="/createExam" className="m-3">
-        Create Exam
+      {data.map((val,index)=>(
+      <Link key={index} to={val.to} className="m-3">
+        {val.title}
       </Link>
-      <Link to="/viewExam" className="m-3">
-        View Exam
-      </Link>
-      <Link to="/showStudent" className="m-3">
-        Show Student
-      </Link>
-      <Link to="/verifyStudent" className="m-3">
-        Verify Student
-      </Link>
-      <Link to="/resetPassword" className="m-3">
-        Change Password
-      </Link>
+      ))}
     </>
   );
 }

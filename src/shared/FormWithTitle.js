@@ -16,8 +16,8 @@ function FormWithTitle({
 }) {
   return (
     <>
-      {loader && <Loader />}
       <Title title={title} />
+      {loader && <Loader />}
       <p>{curQuestion}</p>
       {item && (
         <form onSubmit={handleSubmit}>
