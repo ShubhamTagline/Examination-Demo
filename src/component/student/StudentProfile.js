@@ -15,10 +15,10 @@ function StudentProfile() {
         "access-token": localGet("token"),
       });
       setLoader(false);
-      if (response.data.statusCode === 200) {
+      if (response?.data?.statusCode === 200) {
         setItem({
-          name: response.data.data.name,
-          emailProfile: response.data.data.email,
+          name: response.data?.data?.name,
+          emailProfile: response.data?.data?.email,
         });
       }
     };

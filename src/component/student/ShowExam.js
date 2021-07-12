@@ -1,9 +1,8 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { ButtonField, localGet} from "../../shared/OtherReuse";
+import { ButtonField, localGet } from "../../shared/OtherReuse";
 import { reuseApi } from "../../shared/ReuseApi";
 import Title from "../../shared/Title";
 import Loader from "../../shared/Loader";
@@ -18,8 +17,8 @@ function ShowExam() {
         "access-token": localGet("token"),
       });
       setLoader(false);
-      if (response.data.statusCode === 200) {
-        setItem(response.data.data);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data?.data);
       }
     };
     examData();
@@ -28,7 +27,7 @@ function ShowExam() {
   return (
     <>
       <Title title="Exam Detail"></Title>
-      {loader && <Loader/>}
+      {loader && <Loader />}
       {item && (
         <Table striped bordered hover size="sm" className="container">
           <thead>

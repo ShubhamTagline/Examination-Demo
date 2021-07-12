@@ -18,8 +18,8 @@ function ViewExam() {
         }
       );
       setLoader(false);
-      if (response.data.statusCode === 200) {
-        setItem(response.data.data);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data?.data);
       }
     };
     userData();

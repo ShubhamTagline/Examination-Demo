@@ -10,10 +10,10 @@ import {
   localSet,
   validateForm,
   validateFormNext,
-  validName,
 } from "../../shared/OtherReuse";
 import { reuseApi } from "../../shared/ReuseApi";
 import Title from "../../shared/Title";
+import { handleCase } from "../../shared/ValidCase";
 
 function CreateExam() {
   const initialError = {
@@ -47,30 +47,10 @@ function CreateExam() {
   const handleChange = (e, index) => {
     const name = e.target.name;
     const value = e.target.value;
-    let errors = item.errors;
 
-    switch (name) {
-      case "question":
-        errors.question = validName(value, "Question");
-        break;
-      case "opt1":
-        errors.opt1 = validName(value, "Option");
-        break;
-      case "opt2":
-        errors.opt2 = validName(value, "Option");
-        break;
-      case "opt3":
-        errors.opt3 = validName(value, "Option");
-        break;
-      case "opt4":
-        errors.opt4 = validName(value, "Option");
-        break;
-      case "subjectName":
-        errors.subjectName = validName(value);
-        break;
-      default:
-        break;
-    }
+    let cloneItem = { ...item };
+    let data = handleCase(name, value);
+    cloneItem.errors[name] = (data && data) || "";
 
     if (index === 1) {
       item.answer = item.opt1;
@@ -89,7 +69,7 @@ function CreateExam() {
     setItem({
       ...item,
       [name]: value ? value.trim() && value.replace(/\s+/g, " ") : value,
-      errors,
+      errors: cloneItem.errors,
     });
   };
 
@@ -173,7 +153,7 @@ function CreateExam() {
         localSet("examPaper", JSON.stringify(structureItem));
       }
       currentQuestion !== 14 && setItem(initialState);
-      setCurrentQuestion(storageResult.questions.length);
+      setCurrentQuestion(storageItem && storageItem?.questions.length);
     }
   };
 
@@ -279,9 +259,7 @@ function CreateExam() {
   const handleDelete = (e, index) => {
     e.preventDefault();
     const cloneNote = { ...note };
-    {
-      cloneNote.note.length > 0 && cloneNote.note.splice(index, 1);
-    }
+    cloneNote.note.length > 0 && cloneNote.note.splice(index, 1);
     cloneNote.errors = " ";
     setNote(cloneNote);
   };

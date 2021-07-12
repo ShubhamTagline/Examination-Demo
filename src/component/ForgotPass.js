@@ -3,46 +3,44 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { forgotAry } from "../shared/FormAry";
 import FormWithTitle from "../shared/FormWithTitle";
- import { alertMsg, validateForm, validEmail } from "../shared/OtherReuse";
+import { alertMsg, validateForm } from "../shared/OtherReuse";
 import { reuseApi } from "../shared/ReuseApi";
- 
+import { handleCase } from "../shared/ValidCase";
+
+const initialState = {
+  email: "",
+  errors: {
+    email: " ",
+  },
+};
 function ForgotPass() {
-  const initialState = {
-    email: "",
-    errors: {
-      email: " ",
-    },
-  };
-  const [item, setItem] = useState(initialState);
+  const [item, setItem] = useState({ ...initialState });
 
   const handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    let errors = item.errors;
 
-    switch (name) {
-      case "email":
-        errors && (errors.email = validEmail(value));
-        break;
-      default:
-        break;
-    }
+    let cloneItem = { ...item };
+    let data = handleCase(name, value);
+    cloneItem.errors[name] = (data && data) || "";
 
     setItem({
       ...item,
       [name]: value,
-      errors,
+      errors: cloneItem.errors,
     });
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
     if (validateForm(item.errors)) {
-      delete item.errors;
-      const response = await reuseApi("post", "users/ForgotPassword", item);
-      alert(response.data.message);
-      if (response.data.statusCode === 200) {
-        setItem(initialState);
+      let payLoad = {
+        email: item.email,
+      };
+      const response = await reuseApi("post", "users/ForgotPassword", payLoad);
+      alert(response?.data?.message);
+      if (response?.data?.statusCode === 200) {
+        setItem({ ...initialState });
       }
     } else {
       alertMsg();

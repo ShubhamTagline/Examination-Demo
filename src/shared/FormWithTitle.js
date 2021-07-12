@@ -1,13 +1,24 @@
-import React from 'react'
-import InputFields from './InputFields';
-import Loader from './Loader';
-import Title from './Title';
+import React from "react";
+import InputFields from "./InputFields";
+import Loader from "./Loader";
+import Title from "./Title";
 
-function FormWithTitle({ title, loader, item, handleSubmit, list, handleChange,errors }) {
+function FormWithTitle({
+  title,
+  loader,
+  item,
+  handleSubmit,
+  list,
+  handleChange,
+  errors,
+  submitDisable,
+  curQuestion,
+}) {
   return (
     <>
-      <Title title={title} />
       {loader && <Loader />}
+      <Title title={title} />
+      <p>{curQuestion}</p>
       {item && (
         <form onSubmit={handleSubmit}>
           <InputFields
@@ -15,6 +26,7 @@ function FormWithTitle({ title, loader, item, handleSubmit, list, handleChange,e
             data={item}
             onChange={handleChange}
             errors={errors}
+            submitDisable={submitDisable}
           />
         </form>
       )}
@@ -22,4 +34,4 @@ function FormWithTitle({ title, loader, item, handleSubmit, list, handleChange,e
   );
 }
 
-export default FormWithTitle
+export default FormWithTitle;

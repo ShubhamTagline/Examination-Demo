@@ -1,18 +1,16 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { questionAry } from "../../shared/FormAry";
-import InputFields from "../../shared/InputFields";
+import FormWithTitle from "../../shared/FormWithTitle";
 import Loader from "../../shared/Loader";
 import {
   ButtonField,
   localGet,
   validateFormNext,
-  validName,
 } from "../../shared/OtherReuse";
 import { reuseApi } from "../../shared/ReuseApi";
-import Title from "../../shared/Title";
+import { handleCase } from "../../shared/ValidCase";
 
 function EditExam() {
   const initialError = {
@@ -33,7 +31,7 @@ function EditExam() {
     errors: initialError,
   };
 
-  const [item, setItem] = useState(initialState);
+  const [item, setItem] = useState({ ...initialState });
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [result, setResult] = useState();
   const [loader, setLoader] = useState(true);
@@ -58,27 +56,10 @@ function EditExam() {
   const handleChange = (e, index) => {
     const name = e.target.name;
     const value = e.target.value;
-    let errors = item.errors;
 
-    switch (name) {
-      case "question":
-        errors.question = validName(value, "Question");
-        break;
-      case "opt1":
-        errors.opt1 = validName(value, "Option");
-        break;
-      case "opt2":
-        errors.opt2 = validName(value, "Option");
-        break;
-      case "opt3":
-        errors.opt3 = validName(value, "Option");
-        break;
-      case "opt4":
-        errors.opt4 = validName(value, "Option");
-        break;
-      default:
-        break;
-    }
+    let cloneItem = { ...item };
+    let data = handleCase(name, value);
+    cloneItem.errors[name] = (data && data) || "";
 
     if (index === 1) {
       item.answer = item.opt1;
@@ -96,7 +77,7 @@ function EditExam() {
     setItem({
       ...item,
       [name]: value ? value.trim() && value.replace(/\s+/g, " ") : value,
-      errors,
+      errors: cloneItem.errors,
     });
   };
 
@@ -119,24 +100,24 @@ function EditExam() {
     cloneItem.errors = initialError;
     setItem(cloneItem);
   };
-  
-  const updateQuestion=async()=>{
-     const data = result[currentQuestion];
-     data.question = item.question;
-     data.answer = item.answer;
-     data.options[0] = item.opt1;
-     data.options[1] = item.opt2;
-     data.options[2] = item.opt3;
-     data.options[3] = item.opt4;
-     const tempData = { questions: result };
-     await reuseApi("put", `dashboard/Teachers/editExam?id=${id}`, tempData, {
-       "access-token": localGet("token"),
-     });
-  }
+
+  const updateQuestion = async () => {
+    const data = result[currentQuestion];
+    data.question = item.question;
+    data.answer = item.answer;
+    data.options[0] = item.opt1;
+    data.options[1] = item.opt2;
+    data.options[2] = item.opt3;
+    data.options[3] = item.opt4;
+    const tempData = { questions: result };
+    await reuseApi("put", `dashboard/Teachers/editExam?id=${id}`, tempData, {
+      "access-token": localGet("token"),
+    });
+  };
 
   const commonUpdate = () => {
     if (confirm("Are you sure you want to Update Question")) {
-      updateQuestion()
+      updateQuestion();
     }
   };
 
@@ -144,7 +125,7 @@ function EditExam() {
   const handleEdit = async (e) => {
     e.preventDefault();
     if (tempUpdate && validateFormNext(item.errors)) {
-      updateQuestion()
+      updateQuestion();
       handleErrors();
     }
   };
@@ -160,38 +141,36 @@ function EditExam() {
 
   return (
     <>
-      <Title title="Edit Exam" />
       {loader && <Loader />}
       {result && (
         <>
-          <p>{currentQuestion + 1}/15</p>
-          <form>
-            <InputFields
-              fields={questionAry}
-              data={item}
-              onChange={handleChange}
-              submitDisable={true}
-              errors={item.errors}
-            ></InputFields>
-            <ButtonField value="Edit" onClick={handleEdit} /> &nbsp;
-            {currentQuestion !== 14 ? (
-              <ButtonField
-                value="Next"
-                onClick={(e) => PreviousNext(e, currentQuestion + 1)}
-              />
-            ) : (
-              <ButtonField value="Next" disable={true} cursorPoint={true} />
-            )}
-            &nbsp;&nbsp;
-            {currentQuestion === 0 ? (
-              <ButtonField value="Previous" disable={true} cursorPoint={true} />
-            ) : (
-              <ButtonField
-                value="Previous"
-                onClick={(e) => PreviousNext(e, currentQuestion - 1)}
-              />
-            )}
-          </form>
+          <FormWithTitle
+            title="Edit Exam"
+            item={item}
+            list={questionAry}
+            submitDisable={true}
+            handleChange={handleChange}
+            errors={item.errors}
+            curQuestion={`${currentQuestion + 1}/15`}
+          />
+          <ButtonField value="Edit" onClick={handleEdit} /> &nbsp;
+          {currentQuestion !== 14 ? (
+            <ButtonField
+              value="Next"
+              onClick={(e) => PreviousNext(e, currentQuestion + 1)}
+            />
+          ) : (
+            <ButtonField value="Next" disable={true} cursorPoint={true} />
+          )}
+          &nbsp;&nbsp;
+          {currentQuestion === 0 ? (
+            <ButtonField value="Previous" disable={true} cursorPoint={true} />
+          ) : (
+            <ButtonField
+              value="Previous"
+              onClick={(e) => PreviousNext(e, currentQuestion - 1)}
+            />
+          )}
         </>
       )}
     </>

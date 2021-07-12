@@ -16,8 +16,8 @@ function VerifyStudent() {
         { "access-token": localGet("token") }
       );
       setLoader(false);
-      if (response.data.statusCode === 200) {
-        setItem(response.data.data);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data?.data);
       }
     };
     userData();

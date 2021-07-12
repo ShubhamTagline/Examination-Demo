@@ -2,9 +2,8 @@ import React from "react";
 import { ButtonField } from "./OtherReuse";
 import propTypes from "prop-types";
 
-function InputFields({ fields, data, errors, onChange,submitDisable}) {
- 
-  return ( 
+function InputFields({ fields, data, errors, onChange, submitDisable }) {
+  return (
     <>
       {fields.data.map((val, index) => {
         return (
@@ -16,7 +15,8 @@ function InputFields({ fields, data, errors, onChange,submitDisable}) {
               placeholder={val.placeholder}
               value={val.value ? val.value : data && data[val.name]}
               checked={
-                data && data.answer &&
+                data &&
+                data.answer &&
                 data[fields?.data[index + 1]?.name] === data.answer
               }
               {...(val.type === "password" && { autoComplete: "on" })}
@@ -48,4 +48,3 @@ InputFields.propTypes = {
 };
 
 export default InputFields;
- 

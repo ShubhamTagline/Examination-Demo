@@ -6,28 +6,30 @@ import { alertMsg, localSet, validateForm } from "../shared/OtherReuse";
 import { reuseApi } from "../shared/ReuseApi";
 import { handleCase } from "../shared/ValidCase";
 
+const initialState = {
+  email: "",
+  password: "",
+  errors: {
+    email: " ",
+    password: " ",
+  },
+};
+
 function SignIn() {
-  const initialState = {
-    email: "",
-    password: "",
-    errors: {
-      email: " ",
-      password: " ",
-    },
-  };
-  const [item, setItem] = useState(initialState);
+  const [item, setItem] = useState({ ...initialState });
 
   const handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    let errors = item.errors;
 
-    handleCase(name, value, errors);
+    let cloneItem = { ...item };
+    let data = handleCase(name, value);
+    cloneItem.errors[name] = (data && data) || "";
 
     setItem({
       ...item,
-      [name]: value,
-      errors,
+      [name]: value ? value.trim() && value.replace(/\s+/g, " ") : value,
+      errors: cloneItem.errors,
     });
   };
 
@@ -35,11 +37,14 @@ function SignIn() {
   const handleClick = async (e) => {
     e.preventDefault();
     if (validateForm(item.errors)) {
-      delete item.errors;
-      const response = await reuseApi("post", "users/Login", item);
-      const list = response.data?.data;
-      alert(response.data.message);
-      if (response.data.statusCode === 200) {
+      let payload = {
+        email: item.email,
+        password: item.password,
+      };
+      const response = await reuseApi("post", "users/Login", payload);
+      const list = response?.data.data;
+      response.data?.message && alert(response.data?.message);
+      if (response?.data?.statusCode === 200) {
         localSet("token", list.token);
         localSet("role", list.role);
         setItem(initialState);

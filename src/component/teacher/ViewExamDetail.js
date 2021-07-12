@@ -20,8 +20,8 @@ function ViewExamDetail() {
         { "access-token": localGet("token") }
       );
       setLoader(false);
-      if (response.data.statusCode === 200) {
-        setItem(response.data.data.questions);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data.data?.questions);
       }
     };
     userData();

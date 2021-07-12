@@ -3,43 +3,33 @@ import { useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { newPassAry } from "../shared/FormAry";
 import FormWithTitle from "../shared/FormWithTitle";
-import { alertMsg, validateForm, validPassword } from "../shared/OtherReuse";
+import { alertMsg, validateForm } from "../shared/OtherReuse";
 import { reuseApi } from "../shared/ReuseApi";
- 
+import { handleCase } from "../shared/ValidCase";
 
+const initialState = {
+  password: "",
+  ConfirmPassword: "",
+  errors: {
+    password: " ",
+    ConfirmPassword: " ",
+  },
+};
 function NewPassword() {
-  const initialState = {
-    Password: "",
-    ConfirmPassword: "",
-    errors: {
-      Password: " ",
-      ConfirmPassword: " ",
-    },
-  };
-
-  const [item, setItem] = useState(initialState);
+  const [item, setItem] = useState({ ...initialState });
 
   const handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    let errors = item.errors;
 
-    switch (name) {
-      case "Password":
-        errors && (errors.Password = validPassword(value));
-        break;
-      case "ConfirmPassword":
-        errors && (errors.ConfirmPassword = validPassword(value));
-        break;
-
-      default:
-        break;
-    }
+    let cloneItem = { ...item };
+    let data = handleCase(name, value);
+    cloneItem.errors[name] = (data && data) || "";
 
     setItem({
       ...item,
       [name]: value,
-      errors,
+      errors: cloneItem.errors,
     });
   };
 
@@ -50,14 +40,17 @@ function NewPassword() {
     e.preventDefault();
     if (validateForm(item.errors)) {
       const token = new URLSearchParams(search).get("token");
-      delete item.errors;
+      let payLoad = {
+        Password: item.password,
+        ConfirmPassword: item.ConfirmPassword,
+      };
       const response = await reuseApi(
         "post",
         `users/ForgotPassword/Verify?token=${token}`,
-        item
+        payLoad
       );
-      alert(response.data.message);
-      if (response.data.statusCode === 200) {
+      alert(response?.data?.message);
+      if (response?.data?.statusCode === 200) {
         history.push("/signIn");
       }
     } else {

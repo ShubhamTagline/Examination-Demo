@@ -1,23 +1,41 @@
-import { validEmail, validName, validPassword, validRole } from "./OtherReuse";
+import { emailReg } from "./OtherReuse";
 
-export const handleCase = (name, value, errors) => {
-  console.log(`name`, name);
+export const handleCase = (name, value) => {
   switch (name) {
     case "email":
-      return (errors[name] = validEmail(value));
+      if (!emailReg.test(value)) {
+        return "Invalid Email";
+      }
+      break;
 
-    case ("password", "Password" || "oldPassword" || "ConfirmPassword"): //find solution for this
-      return (
-        <>
-          {console.log(`${name} Execute`)}
-          {(errors[name] = validPassword(value, name))}
-        </>
-      );
+    case "password":
+    case "oldPassword":
+    case "ConfirmPassword":
+      if (value.trim() === "") {
+        return "*Required";
+      }
+      if (value.length < 7) {
+        return `${name} is Too short`;
+      }
+      break;
+
     case "name":
-      return (errors.name = validName(value, name));
+    case "question":
+    case "opt1":
+    case "opt2":
+    case "opt3":
+    case "opt4":
+    case "subjectName":
+      if (value.trim() === "") {
+        return `${name} is Required`;
+      }
+      break;
 
     case "role":
-      return (errors.role = validRole(value));
+      if (value.length < 2) {
+        return "Please Select Role";
+      }
+      break;
 
     default:
       break;

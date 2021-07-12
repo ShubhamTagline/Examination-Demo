@@ -22,9 +22,9 @@ function GetStudent() {
         { "access-token": localGet("token") }
       );
       setLoader(false);
-      if (response.data.statusCode === 200) {
-        setItem(response.data.data);
-        setResult(response.data.data[0].Result);
+      if (response?.data?.statusCode === 200) {
+        setItem(response.data?.data);
+        setResult(response.data?.data[0]?.Result);
       }
     };
     userData();

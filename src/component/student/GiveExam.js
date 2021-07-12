@@ -1,25 +1,23 @@
 /* eslint-disable */
 import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import { examPaper } from "../../shared/FormAry";
-import InputData from "../../shared/InputData";
-import { ButtonField, localGet, loader } from "../../shared/OtherReuse";
+import { ButtonField, localGet } from "../../shared/OtherReuse";
 import { reuseApi } from "../../shared/ReuseApi";
-import Title from "../../shared/Title";
 import Loader from "../../shared/Loader";
+import FormWithTitle from "../../shared/FormWithTitle";
 
+const initialState = {
+  question: "",
+  opt1: "",
+  opt2: "",
+  opt3: "",
+  opt4: "",
+  answer: "",
+};
 function GiveExam() {
-  const initialState = {
-    question: "",
-    opt1: "",
-    opt2: "",
-    opt3: "",
-    opt4: "",
-    answer: "",
-  };
-  const [item, setItem] = useState(initialState);
+  const [item, setItem] = useState({ ...initialState });
   const [result, setResult] = useState();
   const [loader, setLoader] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -37,8 +35,8 @@ function GiveExam() {
           "access-token": localGet("token"),
         }
       );
+      setLoader(false);
       if (response.data.statusCode === 200) {
-        setLoader(false);
         setResult(response.data.data);
       }
     };
@@ -75,67 +73,65 @@ function GiveExam() {
       structureItem(item);
       let page = currentQuestion + 1;
       setCurrentQuestion(page);
-    }else{
+    } else {
       alert("Please Select Answer");
     }
   };
 
   const structureItem = (item) => {
-      let clonePaper = [...paper];
-      const data = {};
-      data.question = item.id;
-      data.answer = item.answer;
-      clonePaper.push(data);
-      setPaper(clonePaper);
-      return { clonePaper };
+    const data = {};
+    data.question = item.id;
+    data.answer = item.answer;
+    if (paper.length <= 6) paper.push(data);
+    const cloneList = paper.slice();
+    setPaper(cloneList);
+    return cloneList;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const cloneData = structureItem(item);
+    structureItem(item);
     if (item.answer) {
       const response = await reuseApi(
         "post",
         `student/giveExam?id=${id}`,
-        cloneData.clonePaper,
+        paper,
         {
           "access-token": localGet("token"),
         }
       );
       alert(response && response.data.message);
-    }else{
+    } else {
       alert("Please Select Answer");
     }
   };
- 
+
   return (
     <>
-      <Title title="Give Exam"/>
       {loader && <Loader />}
       {result && (
         <>
-          <p>{currentQuestion + 1}/7</p>
-          <form>
-            <InputData
-              fields={examPaper}
-              data={item}
-              onChange={handleChange}
-            ></InputData>
-            <br />
-            {currentQuestion < (result && result.length - 1) ? (
-              <ButtonField
-                variant="primary"
-                value="Save & Next"
-                onClick={(e) => handleSave(e)}
-              />
-            ) : (
-              <ButtonField
-                variant="primary"
-                value="Submit"
-                onClick={(e) => handleSubmit(e)}
-              />
-            )}
-          </form>
+          <FormWithTitle
+            title="Give Exam"
+            item={item}
+            list={examPaper}
+            handleChange={handleChange}
+            submitDisable={true}
+            curQuestion={`${currentQuestion + 1}/7`}
+          />
+          {currentQuestion < (result && result.length - 1) ? (
+            <ButtonField
+              variant="primary"
+              value="Save & Next"
+              onClick={(e) => handleSave(e)}
+            />
+          ) : (
+            <ButtonField
+              variant="primary"
+              value="Submit"
+              onClick={(e) => handleSubmit(e)}
+            />
+          )}
         </>
       )}
     </>
