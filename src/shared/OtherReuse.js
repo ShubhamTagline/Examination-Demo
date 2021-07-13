@@ -51,5 +51,3 @@ export const localGet = (val) => {
 export const localSet = (title, value) => {
   return localStorage.setItem(title, value);
 };
-
- 

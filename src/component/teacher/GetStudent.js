@@ -38,7 +38,6 @@ function GetStudent() {
         item={item}
         header={["name", "email"]}
       />
-
       {result && result.length > 0 && (
         <TableData
           headingCol={["subjectName", "score", "rank", "resultStatus"]}

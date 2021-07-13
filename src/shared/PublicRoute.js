@@ -5,7 +5,9 @@ const SignIn = lazy(() => import("../component/SignIn"));
 const GiveExam = lazy(() => import("../component/student/GiveExam"));
 const ShowExam = lazy(() => import("../component/student/ShowExam"));
 const StudentAdmin = lazy(() => import("../component/student/StudentAdmin"));
-const StudentProfile = lazy(() => import("../component/student/StudentProfile"));
+const StudentProfile = lazy(() =>
+  import("../component/student/StudentProfile")
+);
 const CreateExam = lazy(() => import("../component/teacher/CreateExam"));
 const EditExam = lazy(() => import("../component/teacher/EditExam"));
 const GetStudent = lazy(() => import("../component/teacher/GetStudent"));
@@ -13,12 +15,14 @@ const ShowStudent = lazy(() => import("../component/teacher/ShowStudent"));
 const TeacherAdmin = lazy(() => import("../component/teacher/TeacherAdmin"));
 const VerifyStudent = lazy(() => import("../component/teacher/VerifyStudent"));
 const ViewExam = lazy(() => import("../component/teacher/ViewExam"));
-const ViewExamDetail = lazy(() => import("../component/teacher/ViewExamDetail"));
+const ViewExamDetail = lazy(() =>
+  import("../component/teacher/ViewExamDetail")
+);
 const ForgotPass = lazy(() => import("../component/ForgotPass"));
 const NewPassword = lazy(() => import("../component/NewPassword"));
+const Logout = lazy(() => import("../component/Logout"));
 
-
-const PublicRoute= {
+const PublicRoute = {
   data: [
     {
       path: "/",
@@ -93,7 +97,11 @@ const PublicRoute= {
       path: "/giveExam",
       component: GiveExam,
     },
+    {
+      path: "/logout",
+      component: Logout,
+    },
   ],
 };
 
-export default PublicRoute
+export default PublicRoute;

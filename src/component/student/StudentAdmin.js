@@ -15,15 +15,19 @@ const data = [
     to: "/resetPassword",
     title: "Change Password",
   },
+  {
+    to: "/logout",
+    title: "Logout",
+  },
 ];
 function StudentAdmin() {
   return (
     <>
       <Title title="Student Admin" />
-      {data.map((val,index)=>(
-      <Link key={index} to={val.to} className="m-3">
-        {val.title}
-      </Link>
+      {data.map((val, index) => (
+        <Link key={index} to={val.to} className="m-3">
+          {val.title}
+        </Link>
       ))}
     </>
   );

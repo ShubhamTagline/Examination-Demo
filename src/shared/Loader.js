@@ -1,8 +1,9 @@
 import React from "react";
+import loaderImg from "../assets/Images/tenor.gif"
 
 const Loader = () => (
   <img
-    src="https://media.tenor.com/images/a742721ea2075bc3956a2ff62c9bfeef/tenor.gif"
+    src={loaderImg}
     alt="Not Found"
     style={{ height: "100px", width: "100px" }}
   />

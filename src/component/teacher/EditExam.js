@@ -80,6 +80,7 @@ function EditExam() {
       errors: cloneItem.errors,
     });
   };
+  console.log(`item`, item);
 
   useEffect(() => {
     if (result) {

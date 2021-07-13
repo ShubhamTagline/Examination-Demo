@@ -137,7 +137,7 @@ function CreateExam() {
     if (validateForm(item.errors)) {
       const data = itemStructure();
       if (storageItem) {
-        let tempData = storageItem;
+        let tempData = { ...storageItem };
         tempData.questions.push(data);
         {
           currentQuestion === 14 && (tempData.notes = note.note);
@@ -151,7 +151,8 @@ function CreateExam() {
         localSet("examPaper", JSON.stringify(structureItem));
       }
       currentQuestion !== 14 && setItem(initialState);
-      setCurrentQuestion(storageItem && storageItem?.questions.length);
+      const storageResult = JSON.parse(localStorage.getItem("examPaper"));
+      setCurrentQuestion(storageResult.questions.length);
     }
   };
 
@@ -185,10 +186,9 @@ function CreateExam() {
     showItemStructure(tempData);
   };
 
-  const tempData = Object.values(item.errors).some((val) => val.length > 1);
   const handlePrevious = (e) => {
     e.preventDefault();
-    if (!tempData) {
+    if (validateFormNext(item.errors)) {
       commonUpdate();
       let page = currentQuestion - 1;
       handlePage(page);
@@ -197,7 +197,7 @@ function CreateExam() {
 
   const handleNext = (e) => {
     e.preventDefault();
-    if (!tempData) {
+    if (validateFormNext(item.errors)) {
       commonUpdate();
       if (storageItem.questions.length - currentQuestion === 1) {
         setCurrentQuestion(currentQuestion + 1);
