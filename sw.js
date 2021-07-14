@@ -1,6 +1,6 @@
 let cacheData = "appV1";
 
-this.addEventListener("install", (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(cacheData).then((cache) => {
       cache.addAll([
@@ -25,7 +25,7 @@ this.addEventListener("install", (event) => {
   );
 });
 
-this.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", (event) => {
   if(!navigator.onLine){
     event.respondWith(
       caches.match(event.request).then((result) => {
