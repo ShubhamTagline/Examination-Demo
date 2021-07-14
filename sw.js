@@ -32,7 +32,7 @@ self.addEventListener("install", (event) => {
   // "/Examination-Demo/static/js/main.331a3e04.chunk.js",
 
 self.addEventListener("fetch", (event) => {
-  console.error(`fetch`)
+  console.log(`fetch`)
   if(!navigator.onLine){
     event.respondWith(
       caches.match(event.request).then((result) => {
