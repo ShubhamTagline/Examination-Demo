@@ -16,10 +16,10 @@ self.addEventListener("install", (event) => {
         "index.html",
         "/",
         "/signIn",
-        "static/js/3.9bfb649b.chunk.js",
-        "static/js/0.ddf4a8f4.chunk.js",
-        "static/js/8.1ed39376.chunk.js",
-        "static/js/main.331a3e04.chunk.js"
+        "/Examination-Demo/static/js/3.9bfb649b.chunk.js",
+        "/Examination-Demo/static/js/0.ddf4a8f4.chunk.js",
+        "/Examination-Demo/static/js/8.1ed39376.chunk.js",
+        "/Examination-Demo/static/js/main.331a3e04.chunk.js",
       ]);
     })
   );
@@ -27,7 +27,6 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if(!navigator.onLine){
-    console.log(`Offline Mode`)
     event.respondWith(
       caches.match(event.request).then((result) => {
         if (result) return result;
