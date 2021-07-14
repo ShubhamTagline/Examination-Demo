@@ -1,2 +1,2 @@
 (this.webpackJsonpexam=this.webpackJsonpexam||[]).push([[19],{38:function(t,e,n){"use strict";n(0);var i=n(4);e.a=function(t){var e=t.title;return Object(i.jsx)("h1",{children:e})}},87:function(t,e,n){"use strict";n.r(e);n(0);var i=n(14),s=n(38),o=n(4),r=[{to:"/showExam",title:"View Exam"},{to:"/studentProfile",title:"Student Profile"},{to:"/resetPassword",title:"Change Password"},{to:"/logout",title:"Logout"}];e.default=function(){return Object(o.jsxs)(o.Fragment,{children:[Object(o.jsx)(s.a,{title:"Student Admin"}),r.map((function(t,e){return Object(o.jsx)(i.b,{to:t.to,className:"m-3",children:t.title},e)}))]})}}}]);
-//# sourceMappingURL=19.3714f6f0.chunk.js.map
+//# sourceMappingURL=19.113b6be8.chunk.js.map
