@@ -31,6 +31,9 @@ this.addEventListener("fetch", (event) => {
       caches.match(event.request).then((result) => {
         if (result) return result;
       })
+      .catch(error=>{
+        console.log(`error`, error)
+      })
     );
   }
 });
