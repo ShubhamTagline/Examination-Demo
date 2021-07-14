@@ -27,9 +27,9 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if(!navigator.onLine){
+    console.log(`Offline Mode`)
     event.respondWith(
       caches.match(event.request).then((result) => {
-        console.log(`Offline Mode`)
         if (result) return result;
       })
     );
