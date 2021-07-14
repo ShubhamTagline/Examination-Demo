@@ -16,10 +16,10 @@ this.addEventListener("install", (event) => {
         "index.html",
         "/",
         "/signIn",
-        "/static/js/3.9bfb649b.chunk.js",
-        "/static/js/0.ddf4a8f4.chunk.js",
-        "/static/js/8.1ed39376.chunk.js",
-        "/static/js/main.331a3e04.chunk.js",
+        "/Examination-Demo/static/js/3.9bfb649b.chunk.js",
+        "/Examination-Demo/static/js/0.ddf4a8f4.chunk.js",
+        "/Examination-Demo/static/js/8.1ed39376.chunk.js",
+        "/Examination-Demo/static/js/main.331a3e04.chunk.js",
       ]);
     })
   );
