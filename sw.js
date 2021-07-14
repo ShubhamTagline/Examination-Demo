@@ -13,7 +13,6 @@ self.addEventListener("install", (event) => {
         "/static/js/0.chunk.js",
         "/static/js/9.chunk.js",
         "/static/js/8.chunk.js",
-        "/favicon.ico",
         "/static/media/tenor.706124a2.gif",
         "/static/js/vendors~main.chunk.js",
         "/index.html",
