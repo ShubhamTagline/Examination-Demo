@@ -1,5 +1,5 @@
 {
-  "short_name": "React App",
+  "short_name": "Examination",
   "name": "Examination Demo",
   "icons": [
     {
@@ -16,8 +16,7 @@
       "src": "exam192.png",
       "type": "image/png",
       "sizes": "192x192"
-    }
-       
+    }  
   ],
   "start_url": ".",
   "display": "standalone",
