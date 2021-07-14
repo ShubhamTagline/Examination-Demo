@@ -26,13 +26,13 @@ this.addEventListener("install", (event) => {
 });
 
 this.addEventListener("fetch", (event) => {
-  // if(!navigator.onLine){
+  if(!navigator.onLine){
     event.respondWith(
       caches.match(event.request).then((result) => {
         if (result) return result;
       })
     );
-  // }
+  }
 });
 
  
