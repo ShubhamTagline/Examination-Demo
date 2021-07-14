@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Helmet } from "react-helmet";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Loader from "./shared/Loader";
 import PublicRoute from "./shared/PublicRoute";
