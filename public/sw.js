@@ -4,7 +4,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(cacheData).then((cache) => {
        cache.addAll([
-        //  "/Examination-Demo/public/index.html",
+         "/public/index.html",
          "/Examination-Demo/favicon.ico",
         //  "/Examination-Demo/src/App.js",
         //  "/Examination-Demo/src/index.js",
@@ -13,7 +13,7 @@ self.addEventListener("install", (event) => {
          "/Examination-Demo/static/js/0.ddf4a8f4.chunk.js",
          "/Examination-Demo/static/js/8.1ed39376.chunk.js",
          "/Examination-Demo/static/js/main.331a3e04.chunk.js",
-        //  "/Examination-Demo/public/manifest.json",
+        //  "/Examination-Demo/manifest.json",
        ]);
     })
     );
