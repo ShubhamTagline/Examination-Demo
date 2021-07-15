@@ -7,6 +7,8 @@ self.addEventListener("install", (event) => {
         "/",
         "/index.html",
         "/favicon.ico",
+        "/App.js",
+        "/index.js",
         "/static/media/tenor.706124a2.gif",
         "/Examination-Demo/static/js/3.9bfb649b.chunk.js",
         "/Examination-Demo/static/js/0.ddf4a8f4.chunk.js",
