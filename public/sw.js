@@ -3,7 +3,7 @@ let cacheData = "appV1";
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(cacheData).then((cache) => {
-      return cache.addAll([
+       cache.addAll([
         "/",
         "/index.html",
         "/favicon.ico",
