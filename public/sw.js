@@ -14,11 +14,11 @@ self.addEventListener("install", (event) => {
         "/Examination-Demo/static/js/0.ddf4a8f4.chunk.js",
         "/Examination-Demo/static/js/8.1ed39376.chunk.js",
         "/Examination-Demo/static/js/main.331a3e04.chunk.js",
+        "/manifest.json",
       ]);
     })
     );
   });
-  // "/manifest.json",
   // "/static/js/bundle.js",
   // "/static/js/main.chunk.js",
   // "/static/js/1.chunk.js",
