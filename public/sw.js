@@ -4,7 +4,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(cacheData).then((cache) => {
        cache.addAll([
-         "/public/index.html",
+        //  "/Examination-Demo/public/index.html",
          "/Examination-Demo/favicon.ico",
         //  "/Examination-Demo/src/App.js",
         //  "/Examination-Demo/src/index.js",
